@@ -74,8 +74,8 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function XML_XSLT_Backend_XSLTPROC()
     {
         if (!defined('XML_XSLT_XSLTPROC_CMD')) {
-            include_once 'System/Command.php';
-            $cmd = escapeshellcmd(System_Command::which('xsltproc'));
+            include_once 'System.php';
+            $cmd = escapeshellcmd(System::which('xsltproc'));
             if ($cmd != '') {
                 define('XML_XSLT_XSLTPROC_CMD', $cmd);
             } else {

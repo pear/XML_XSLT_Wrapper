@@ -59,8 +59,8 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
     function XML_XSLT_Backend_Sablotron ()
     {
         if (!defined( 'XSLT_SAXON_CMD')) {
-            include_once 'System/Command.php';
-            $cmd = escapeshellcmd(System_Command::which('sabcmd'));
+            include_once 'System.php';
+            $cmd = escapeshellcmd(System::which('sabcmd'));
             if ($cmd!='') {
                 define('XSLT_SAXON_CMD', $cmd);
             } else {

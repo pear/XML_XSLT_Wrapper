@@ -66,9 +66,9 @@ class XML_XSLT_Backend_XT extends XML_XSLT_Common
     function Backend_XT ()
     {
         if (!defined( 'XSLT_XT_CMD')) {
-            include_once 'System/Command.php';
+            include_once 'System.php';
             $ext = OS_WINDOWS?'.bat':'.sh';
-            $cmd = escapeshellcmd(System_Command::which('xt' . $ext));
+            $cmd = escapeshellcmd(System::which('xt' . $ext));
             if ($cmd!='') {
                 define('XSLT_XT_CMD', $cmd);
             } else {
