@@ -14,6 +14,7 @@
 // | license@php.net so we can mail you a copy immediately.               |
 // +----------------------------------------------------------------------+
 // | Authors: Pierre-Alain Joye <pajoye@pearfr.org>                       |
+// |          Sergio Carvalho   <sergiocarvalho@php.net>                  |
 // +----------------------------------------------------------------------+
 //
 // $Id$
