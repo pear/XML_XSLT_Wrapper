@@ -1,0 +1,9 @@
+Add Instant Saxon support (http://users.iclway.co.uk/mhkay/saxon/instant.html)
+Add Java implementation of XT
+Add Java implementation of xml.apache.org XSLT
+Clean code & PHPDoc comments
+Create a simple example to emulate xmlto bash command
+Uses proc_open as soon 4.3.0 is out
+Better error systems for MSXML and console mode
+Check how to get warning/errors with DOM_XSL
+add @ on every XLST call
