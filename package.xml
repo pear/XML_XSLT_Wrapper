@@ -50,6 +50,7 @@ See http://www.pearfr.org/xslt_wrapper/ for samples and documentation</descripti
       <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/MSXSL_Com.php"/>
       <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/DOM_XSL.php"/>
       <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/XSLTPROC.php"/>
+      <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/XSL_ext.php"/>
       <file role="doc" baseinstalldir="XML/XSLT/Wrapper" name="examples/test.php"/>
       <file role="data" baseinstalldir="XML/XSLT/Wrapper" name="examples/table.xsl"/>
       <file role="data" baseinstalldir="XML/XSLT/Wrapper" name="examples/table2.xsl"/>
