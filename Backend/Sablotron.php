@@ -260,10 +260,12 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
             if ($outputFile=='') {
                 $outputFile = escapeshellarg('pxslt_'.time());
             }
-            exec( XSLT_SAXON_CMD.' ' . $this->xslt ." " . $this->arg_xml .
-                    " '" . $this->_buildParams()."' >" . $outputFile,
-                    $messages,$return_code
-                );
+            $command = XSLT_SAXON_CMD.' ' . $this->xslt ." " . $this->arg_xml;
+            if ($params = $this->_buildParams() != ''){
+            $command .= " '$params' ";
+            }
+            $command .= " >" . $outputFile;
+            exec($command , $messages, $return_code);
             if ($free) {
                 $this->free();
             }
