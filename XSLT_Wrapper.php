@@ -35,13 +35,13 @@ define('XML_XSLT_CACHE_XSLT_URI', false);
 /**
  * Backends names constants
  */
-define('XML_XSLT_XSLT_CMD',  'XSLTPROC');
-define('XML_XSLT_XSLT_EXT',  'XSLT_ext');
-define('XML_XSLT_DOM',       'DOM_XSL');
-define('XML_XSLT_SABLOTRON', 'Sablotron');
-define('XML_XSLT_XT',        'XT');
-define('XML_XSLT_MSXML_CMD', 'MSXML_tty');
-define('XML_XSLT_MSXSL_COM', 'MSXSL_com');
+define('XML_XSLT_XSLTPROC_CMD', 'xsltproc');
+define('XML_XSLT_XSLT_EXT',     'XSLT_ext');
+define('XML_XSLT_DOM',          'DOM_XSL');
+define('XML_XSLT_SABLOTRON',    'Sablotron');
+define('XML_XSLT_XT',           'XT');
+define('XML_XSLT_MSXML_CMD',    'MSXML_tty');
+define('XML_XSLT_MSXSL_COM',    'MSXSL_com');
 
 /**
  * Output modes constants
