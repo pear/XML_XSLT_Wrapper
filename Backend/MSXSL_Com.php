@@ -31,7 +31,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
      * _xsldom
      *
      * ressource XSL sheet DOM document object
-     * @access privat
+     * @access private
      */
     var $_xsldom;
 
@@ -40,7 +40,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
      * _xmldom
      *
      * ressource XML sheet DOM document object
-     * @access privat
+     * @access private
      */
     var $_xmldom;
 
@@ -48,7 +48,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
      * _xslt
      *
      * ressource MSXML2.XSLTemplate Object
-     * @access privat
+     * @access private
      */
     var $_xsltcom;
 
@@ -78,7 +78,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
      * Set the parameters for the active XSL sheet
      *
      * @param  string  $backend name of the backend
-     * @access privat
+     * @access private
      * @see backend
      */
     function _buildParams()
@@ -98,7 +98,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
     /**
      * Set the xml data from a file or a string variable
      *
-     * @access privat
+     * @access private
      * @return mixed return
      * @
      */
@@ -475,7 +475,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
     /**
      * return an error object build from xml error
      *
-     * @access _privat
+     * @access _private
      * @return mixed return
      * @see backend
      */

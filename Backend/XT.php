@@ -25,7 +25,7 @@ class XML_XSLT_Backend_XT extends XML_XSLT_Common
      * _arguments
      *
      * string  arguments console string format
-     * @access privat
+     * @access private
      */
     var $_arguments = null;
 
@@ -33,7 +33,7 @@ class XML_XSLT_Backend_XT extends XML_XSLT_Common
      * _XSL
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $_XSL;
 
@@ -41,7 +41,7 @@ class XML_XSLT_Backend_XT extends XML_XSLT_Common
      * _arg_xsl
      *
      * string  filepath to the xsl file
-     * @access privat
+     * @access private
      */
     var $_arg_xsl;
 
@@ -50,7 +50,7 @@ class XML_XSLT_Backend_XT extends XML_XSLT_Common
      * _arg_xml
      *
      * string  filepath to the xml file
-     * @access privat
+     * @access private
      */
     var $_arg_xml;
 
@@ -85,7 +85,7 @@ class XML_XSLT_Backend_XT extends XML_XSLT_Common
      * Set the parameters for the active XSL sheet
      *
      * @param  string  $backend name of the backend
-     * @access privat
+     * @access private
      * @return mixed return
      * @see backend
      */

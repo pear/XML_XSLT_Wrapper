@@ -25,7 +25,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * _oXML
      *
      * object  DOM XML object
-     * @access privat
+     * @access private
      */
     var $_oXML;
 
@@ -33,7 +33,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * _oXSL
      *
      * object   DOM XSL object
-     * @access privat
+     * @access private
      */
     var $_oXSL;
 

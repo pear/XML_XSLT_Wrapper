@@ -25,7 +25,7 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
      * _hXSLT
      *
      * object  DOM XML object
-     * @access privat
+     * @access private
      */
     var $_hXSLT;
 
@@ -34,7 +34,7 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
      * _XML
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $_XML;
 
@@ -42,7 +42,7 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
      * _XSL
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $_XSL;
 
@@ -77,7 +77,7 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
      * Set the parameters for the active XSL sheet
      *
      * @param  string  $backend name of the backend
-     * @access privat
+     * @access private
      * @return mixed return
      * @see backend
      */

@@ -25,7 +25,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * _hXSLT
      *
      * object  DOM XML object
-     * @access privat
+     * @access private
      */
     var $_hXSLT;
 
@@ -34,7 +34,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * _XML
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $_XML;
 
@@ -42,7 +42,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * _arguments
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $_arguments = null;
 
@@ -50,7 +50,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * _XSL
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $_XSL;
 
@@ -58,7 +58,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * _XSL
      *
      * string  filepath or 'arg:' format
-     * @access privat
+     * @access private
      */
     var $nativeErrorCode;
 
