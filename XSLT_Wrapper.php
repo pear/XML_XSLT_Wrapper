@@ -180,9 +180,9 @@ class XML_XSLT_Wrapper
      */
     function isError($value)
     {
-        return (is_object($value) &&
-                (get_class($value) == 'xlst_error' ||
-                 is_subclass_of($value, 'XML_XSLT_Error')));
+        return (is_object($value)
+                && (strtolower(get_class($value)) == 'xlst_error'
+                || is_subclass_of($value, 'XML_XSLT_Error')));
     }
     // }}}
 }
