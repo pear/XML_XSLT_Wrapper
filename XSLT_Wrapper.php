@@ -19,32 +19,29 @@
 // $Id$
 //
 
+/**
+ * Required files
+ */
 require_once 'PEAR.php';
 
 /**
  * Input modes constants
  */
+define('XML_XSLT_MODE_STRING',    0); // default mode for the XML data
+define('XML_XSLT_MODE_FILE',      1); // default mode for the XSL data
+define('XML_XSLT_MODE_URI',       2);
+define('XML_XSLT_CACHE_XSLT_URI', false);
 
 /**
- * data stored as string variable
- *
- * @const PEAR_XSLT_MODE_STRING
+ * Backends names constants
  */
-define('XML_XSLT_MODE_STRING', 0); // default mode for the XML data
-define('XML_XSLT_MODE_FILE',   1); // default mode for the XSL data
-define('XML_XSLT_MODE_URI',    2);
-define('XML_XSLT_CACHE_XSLT_URI',   false);
-
-/**
- * Backends names
- */
-define('XML_XSLT_XSLT_CMD', 'XSLTPROC');
-define('XML_XSLT_XSLT_EXT', 'XSLT_ext');
-define('XML_XSLT_DOM',      'DOM_XSL');
-define('XML_XSLT_SABLOTRON','Sablotron');
-define('XML_XSLT_XT',       'XT');
-define('XML_XSLT_MSXML_CMD','MSXML_tty');
-define('XML_XSLT_MSXSL_COM','MSXSL_com');
+define('XML_XSLT_XSLT_CMD',  'XSLTPROC');
+define('XML_XSLT_XSLT_EXT',  'XSLT_ext');
+define('XML_XSLT_DOM',       'DOM_XSL');
+define('XML_XSLT_SABLOTRON', 'Sablotron');
+define('XML_XSLT_XT',        'XT');
+define('XML_XSLT_MSXML_CMD', 'MSXML_tty');
+define('XML_XSLT_MSXSL_COM', 'MSXSL_com');
 
 /**
  * Output modes constants
@@ -58,6 +55,7 @@ define('XML_XSLT_OUTPUT_CALLBACK', 5);
  * Errors constants
  */
 define('XML_XSLT_ERROR',                    -1);
+define('XML_XSLT_NOT_SUPPORTED',            -2);
 define('XML_XSLT_ERROR_BACKEND_NOTFOUND',   -1000);
 define('XML_XSLT_ERROR_BACKEND_FAILED',     -1003);
 
@@ -67,7 +65,6 @@ define('XML_XSLT_ERROR_TMPFILE_FAILED',     -1002);
 define('XML_XSLT_ERROR_FILE_FAILED',        -1003);
 define('XML_XSLT_ERROR_MKDIR_FAILED',       -1004);
 define('XML_XSLT_ERROR_MISSEDDIR_FAILED',   -1005);
-
 
 define('XML_XSLT_ERROR_XML_EMPTY',          -2002);
 define('XML_XSLT_ERROR_XSL_EMPTY',          -2003);
@@ -96,7 +93,7 @@ class XML_XSLT_Wrapper
      *
      * @param  string  $backend name of the backend
      * @access public
-     * @return mixed a newly created XSLT object, or a XSLT error code on
+     * @return mixed a newly created XSLT object, or a XSLT error code
      * @see backend
      */
     function &factory($backend)
@@ -104,9 +101,8 @@ class XML_XSLT_Wrapper
         @include_once "XML/XSLT/Wrapper/Backend/$backend.php";
         $classname = 'XML_XSLT_Backend_' . $backend;
         if (!class_exists($classname)) {
-            include_once 'PEAR.php';
-            return $this->raiseError(XML_XSLT_ERROR_BACKEND_NOTFOUND,
-                                    null, null, 'XML_XSLT_Error');
+            return PEAR::raiseError(null, XML_XSLT_ERROR_BACKEND_NOTFOUND,
+                                    null, null, null, 'XML_XSLT_Error', true);
         }
         @$obj =& new $classname;
         return $obj;
@@ -143,24 +139,26 @@ class XML_XSLT_Wrapper
     {
         static $errorMessages;
         if (!isset($errorMessages)) {
-        $errorMessages = array(
-            XML_XSLT_ERROR                      => 'Unknown Error',
-            XML_XSLT_ERROR_BACKEND_NOTFOUND     => 'Unknown backend',
-            XML_XSLT_ERROR_UNKNOWN_MODE         => 'Unknown mode',
-            XML_XSLT_ERROR_TMPFILE_FAILED       => 'Cannot create temp file',
-            XML_XSLT_ERROR_XML_EMPTY            => 'XML data is empty',
-            XML_XSLT_ERROR_XSL_EMPTY            => 'XSL data is empty',
-            XML_XSLT_ERROR_XSLFILE_NOTFOUND     => 'Cannot load/find XSL file',
-            XML_XSLT_ERROR_XMLFILE_NOTFOUND     => 'Cannot load/find XML file',
-            XML_XSLT_ERROR_XMLPARSER_ERROR      =>
-                                        'Error while parsing the XML tree',
-            XML_XSLT_ERROR_XSLPARSER_ERROR      =>
-                                        'Error while parsing the XSL tree',
-            XML_XSLT_ERROR_XSLEXEC_ERROR        =>
-                                        'Error while running transformation',
-            XML_XSLT_ERROR_NOOPTIONS            =>
-                                        'Missing Options for batch mode'
-        );
+            $errorMessages = array(
+                XML_XSLT_ERROR                      => 'Unknown Error',
+                XML_XSLT_ERROR_BACKEND_NOTFOUND     => 'Unknown backend',
+                XML_XSLT_ERROR_UNKNOWN_MODE         => 'Unknown mode',
+                XML_XSLT_ERROR_TMPFILE_FAILED       => 'Cannot create temp file',
+                XML_XSLT_ERROR_XML_EMPTY            => 'XML data is empty',
+                XML_XSLT_ERROR_XSL_EMPTY            => 'XSL data is empty',
+                XML_XSLT_ERROR_XSLFILE_NOTFOUND     => 'Cannot load/find XSL file',
+                XML_XSLT_ERROR_XMLFILE_NOTFOUND     => 'Cannot load/find XML file',
+                XML_XSLT_ERROR_XMLPARSER_ERROR      =>
+                                            'Error while parsing the XML tree',
+                XML_XSLT_ERROR_XSLPARSER_ERROR      =>
+                                            'Error while parsing the XSL tree',
+                XML_XSLT_ERROR_XSLEXEC_ERROR        =>
+                                            'Error while running transformation',
+                XML_XSLT_ERROR_NOOPTIONS            =>
+                                            'Missing Options for batch mode',
+                XML_XSLT_NOT_SUPPORTED              =>
+                                            'Method not implemented in backend'
+            );
         }
         if (XML_XSLT_Wrapper::isError($value)) {
             $value = $value->getCode();
@@ -193,7 +191,7 @@ class XML_XSLT_Wrapper
  * Common functions
  *
  * @package XML_XSLT_Wrapper
- * @author Pierre-Alain Joye  <pajoye@pearfr.org>
+ * @author  Pierre-Alain Joye  <pajoye@pearfr.org>
  */
 class XML_XSLT_Common extends PEAR
 {
@@ -713,7 +711,8 @@ class XML_XSLT_Common extends PEAR
     /**
      * Output to the default output
      *
-     * @param  string  $backend name of the backend
+     * @param  int    $mode  the desired output mode
+     * @param  string $arg   file name or callback function name
      * @access public
      * @return boolean
      * @see backend
@@ -726,9 +725,6 @@ class XML_XSLT_Common extends PEAR
         if ($mode = XML_XSLT_OUTPUT_CALLBACK) {
             $this->callback = $arg;
         }
-        if ($mode = XML_XSLT_OUTPUT_CALLBACK) {
-            $this->callback = $arg;
-        }
         $this->OutputMode = $mode;
     }
 
@@ -736,54 +732,61 @@ class XML_XSLT_Common extends PEAR
     // {{{ ResultDumpFile
 
     /**
-     * Output to a file
+     * Output to a file.
+     * 
+     * This method has to be overridden in the backend.
      *
-     * @param  string  $backend name of the backend
      * @access public
-     * @return boolean
+     * @return boolean  true if success, false otherwise
      * @see backend
      */
     function ResultDumpFile()
     {
+        return $this->raiseError(XML_XSLT_NOT_SUPPORTED);
     }
 
     // }}}
     // {{{ ResultDumpMem
 
     /**
-     * Return the output
+     * Return the output.
      *
-     * @param  string  $backend name of the backend
+     * This method has to be overridden in the backend.
+     *
      * @access public
-     * @return string
+     * @return boolean  true if success, false otherwise
+     * @return mixed    string if success, false otherwise
      * @see backend
      */
     function ResultDumpMem()
     {
-        return false;
+        return $this->raiseError(XML_XSLT_NOT_SUPPORTED);
     }
 
     // }}}
     // {{{ ResultDumpOut
 
     /**
-     * Output to the default output
+     * Output to the default output.
      *
-     * @param  string  $backend name of the backend
+     * This method has to be overridden in the backend.
+     *
      * @access public
-     * @return boolean
+     * @return mixed  nothing if all went well, false otherwise 
      * @see backend
      */
     function ResultDumpOut()
     {
-        return false;
+        return $this->raiseError(XML_XSLT_NOT_SUPPORTED);
     }
 
     // }}}
     // {{{ batchXML
 
     /**
-     * Transform one single XML data with multiple XSL files
+     * Transform one single XML data with multiple XSL files.
+     *
+     * This method has to be overridden in the backend.
      *
      * @param  array  $options  Array with all data and options needed
      * @access public
@@ -792,7 +795,7 @@ class XML_XSLT_Common extends PEAR
      */
     function batchXML($options)
     {
-        return false;
+        return $this->raiseError(XML_XSLT_NOT_SUPPORTED);
     }
 
     // }}}
@@ -801,14 +804,15 @@ class XML_XSLT_Common extends PEAR
     /**
      * Transform multiple XML data with a single XSL files
      *
-     * @param  array  $options  Array with all data and options needed
+     * @param  array   $options      Array with all data and options needed
+     * @param  boolean $singleoutput not used
      * @access public
-     * @return mixed return
+     * @return boolean true if success, false otherwise
      * @see backend
      */
     function batchXSL($options, $singleoutput = false)
     {
-        return false;
+        return $this->raiseError(XML_XSLT_NOT_SUPPORTED);
     }
 
     // }}}
@@ -859,8 +863,8 @@ class XML_XSLT_Common extends PEAR
  * XML_XSLT_Error implements a class for reporting portable XSLT error
  * messages.
  *
- * @package  XML_XSLT_Wrapper
- * @author Pierre-Alain Joye  <pajoye@pearfr.org>
+ * @package XML_XSLT_Wrapper
+ * @author  Pierre-Alain Joye  <pajoye@pearfr.org>
  */
 class XML_XSLT_Error extends PEAR_Error
 {
