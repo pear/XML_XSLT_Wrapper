@@ -238,7 +238,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                 $string_result = $result;
             }
 
-            if ($return_code == 0 && is_string($string_result) && $string_result > 0){
+            if ($return_code == 0 && is_string($string_result) && strlen($string_result) > 0){
                 return $string_result;
             } else {
                 $this->error = PEAR::raiseError(null,
