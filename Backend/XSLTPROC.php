@@ -20,6 +20,14 @@
 // $Id$
 //
 
+/**
+ * Backend which manages
+ * interaction with the xsltproc command.
+ * 
+ * This command is part of the libxslt library.
+ *
+ * @see http://xmlsoft.org/XSLT/
+ */
 class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
 {
     /**
@@ -61,10 +69,9 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
      * Constructor
      *
      * @access public
-     * @return mixed return
-     * @see backend
+     * @return mixed  nothing or PEAR_Error object
      */
-    function XML_XSLT_Backend_XSLTPROC ()
+    function XML_XSLT_Backend_XSLTPROC()
     {
         if (!defined('XSLT_XSLTPROC_CMD')) {
             include_once 'System/Command.php';
@@ -148,7 +155,6 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     /**
      * Set the XML DATA
      *
-     *
      * @access public
      * @return mixed return
      * @see backend
@@ -166,13 +172,11 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                     $$this->_arg_xml = $this->xml;
                 break;
             default:
-                $this->error = PEAR::raiseError(null,
+                $this->error = $this->raiseError(
                                     XML_XSLT_ERROR_UNKNOWN_MODE,
                                     null, null,
-                                    'Unknown XML mode',
-                                    $this->error_class, true
+                                    'Unknown XML mode'
                                 );
-                return false;
                 return false;
         }
         $this->_initXML_Done = true;
@@ -265,16 +269,16 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function ResultDumpFile($free = true)
     {
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
-            exec( XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
-                    ' -o ' . $this->outputFile .
-                    $this->_arg_xsl . ' ' . $this->_arg_xml,
-                    $messages, $return_code);
+            exec(XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+                 ' -o ' . $this->outputFile . ' ' .
+                 $this->_arg_xsl . ' ' . $this->_arg_xml,
+                 $result, $return_code);
 
             if ($free) {
                 $this->free();
             }
 
-            if (is_array($messages)) {
+            if (is_array($result) && sizeof($result) > 0) {
                 $string_result = implode("\n", $result);
             } else {
                 $string_result = $result;
@@ -349,7 +353,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function batchXML($options = null)
     {
         if (is_null($options)) {
-            $this->error = PEAR::raiseError(null,
+            $this->error = $this->raiseError(null,
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
                                 ' missing XML data',
