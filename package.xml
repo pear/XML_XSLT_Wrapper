@@ -36,13 +36,11 @@ See http://www.pearfr.org/xslt_wrapper/ for samples and documentation</descripti
     </maintainer>
   </maintainers>
   <release>
-    <version>0.2</version>
-    <date>2002-10-12</date>
+    <version>0.2.1</version>
+    <date>2003-07-26</date>
     <license>PHP License</license>
     <state>alpha</state>
-    <notes>- Add XSLT command line support, xsltproc (Arnaud Limbourg)
-- Apply more CS to the sources (Arnaud)
-- Fix PEAR include (Michal Stochmiale)</notes>
+    <notes>- package fix only</notes>
     <filelist>
       <file role="php" baseinstalldir="XML/XSLT" install-as="Wrapper.php" name="XSLT_Wrapper.php"/>
       <file role="doc" baseinstalldir="XML/XSLT" name="TODO"/>
