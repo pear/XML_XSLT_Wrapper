@@ -112,7 +112,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      */
     function _initXSL()
     {
-        if ($this->hXSLT    = xslt_create()) {
+        if ($this->_hXSLT    = xslt_create()) {
             switch( $this->XSL_Mode ){
                 case XML_XSLT_MODE_STRING:
                         $this->_arguments['/_xsl'] = &$this->xslt;
@@ -139,8 +139,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
             $this->error = PEAR::raiseError(null,
                     XML_XSLT_ERROR_XSLPARSER_ERROR,
                     null, null,
-                    'Error: '.xslt_errno($this->_oXSL).':'.
-                    xslt_error($this->_oXSL),
+                    'Error: '.xslt_errno($this->_hXSLT).':'.
+                    xslt_error($this->_hXSLT),
                     $this->error_class, true);
             return false;
         }
@@ -233,7 +233,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
             if ($this->error_code==0) {
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?$this->_arguments:array();
-                if ($this->result=xslt_process($this->hXSLT, $this->arg_xml, $this->arg_xsl, null, $args, $this->params)) {
+                if ($this->result=xslt_process($this->_hXSLT, $this->arg_xml, $this->arg_xsl, null, $args, $this->params)) {
                     echo $this->result;
                     if ($free) {
                         $this->free();
@@ -241,8 +241,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                 } else {
                     $error      = true;
                     $error_code = XML_XSLT_ERROR_XSLEXEC_ERROR;
-                    $error_user = xslt_errno($this->_oXSL).
-                                  ': '.xslt_error($this->_oXSL);
+                    $error_user = xslt_errno($this->_hXSLT).
+                                  ': '.xslt_error($this->_hXSLT);
                 }
             }
         }
@@ -277,7 +277,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
             if ($this->error_code==0) {
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?
                         $this->_arguments:array();
-                $result = @xslt_process($this->hXSLT, $this->arg_xml,
+                $result = @xslt_process($this->_hXSLT, $this->arg_xml,
                             $this->arg_xsl, null, $args, $this->params);
                 if ($result){
                     if ($free) {
@@ -287,8 +287,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                     $this->error = PEAR::raiseError(null,
                                     XML_XSLT_ERROR_XSLEXEC_ERROR,
                                     null, null,
-                                    xslt_errno($this->_oXSL).
-                                    ': '.xslt_error($this->_oXSL),
+                                    xslt_errno($this->_hXSLT).
+                                    ': '.xslt_error($this->_hXSLT),
                                     $this->error_class, true
                                 );
                 }
@@ -320,15 +320,15 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                         $this->_arguments:array();
                 $params = isset($this->params)&&sizeof($this->params)?
                         $this->params:array();
-                $result = xslt_process($this->hXSLT, $this->arg_xml,
+                $result = xslt_process($this->_hXSLT, $this->arg_xml,
                             $this->arg_xsl, $output_file,
                             $args, $params);
                 if (!$result) {
                     $this->error = PEAR::raiseError(null,
                                     XML_XSLT_ERROR_XSLEXEC_ERROR,
                                     null, null,
-                                    xslt_errno($this->hXSLT).
-                                    ': '.xslt_error($this->hXSLT),
+                                    xslt_errno($this->_hXSLT).
+                                    ': '.xslt_error($this->_hXSLT),
                                     $this->error_class, true
                                 );
                     $error = true;
@@ -506,7 +506,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      */
     function free()
     {
-        xslt_free($this->hXSLT);
+        xslt_free($this->_hXSLT);
     }
 
     // }}}
