@@ -77,7 +77,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
             include_once 'System/Command.php';
             $cmd = escapeshellcmd(System_Command::which('xsltproc'));
             if ($cmd != '') {
-                define('XSLT_XSLTPROC_CMD', $cmd);
+                define('XML_XSLT_XSLTPROC_CMD', $cmd);
             } else {
                 return PEAR::raiseError('command xsltproc not found');
             }
@@ -224,7 +224,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function ResultDumpMem($free = true)
     {
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
-            exec(   XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+            exec(   XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                     $this->_arg_xsl . ' ' . $this->_arg_xml,
                     $result, $return_code);
 
@@ -269,7 +269,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function ResultDumpFile($free = true)
     {
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
-            exec(XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+            exec(XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                  ' -o ' . $this->outputFile . ' ' .
                  $this->_arg_xsl . ' ' . $this->_arg_xml,
                  $result, $return_code);
@@ -316,7 +316,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function ResultDumpOut($free = true)
     {
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
-            passthru( XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+            passthru( XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                       $this->_arg_xsl . ' ' . $this->_arg_xml);
 
             if ($free) {
@@ -403,7 +403,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
             $xslt_args = '';
 
             foreach ($xsl_files as $xslt_file => $xslt) {
-                exec(   XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+                exec(   XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                         ' -o ' . $dest_dir . $xslt['outputfile'] .
                         escapeshellarg($xslt['filepath']) . ' ' .
                         $this->_arg_xml,
@@ -514,7 +514,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                     $xmlfile    = $xml['data'];
                 }
 
-                exec(   XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+                exec(   XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                         ' -o ' . $dest_dir . $xml['outputfile'] .
                         $this->_arg_xsl . ' ' . $this->_arg_xml,
                         $messages,
