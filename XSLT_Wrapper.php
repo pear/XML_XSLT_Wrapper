@@ -188,7 +188,8 @@ class XML_XSLT_Wrapper
 }
 
 /**
- * Common functions
+ * Base class from which backends
+ * inherit.
  *
  * @package XML_XSLT_Wrapper
  * @author  Pierre-Alain Joye  <pajoye@pearfr.org>
@@ -198,7 +199,7 @@ class XML_XSLT_Common extends PEAR
     /**
      * Defines if the backend works in a shell
      * 
-     * @var boolean  $_console_mode
+     * @var    boolean  $_console_mode
      * @access private
      */
     var $_console_mode = false;
@@ -206,7 +207,7 @@ class XML_XSLT_Common extends PEAR
     /**
      * Key/Value parameters passed to the XSLT sheet
      * 
-     * @var array $params
+     * @var    array $params
      * @access private
      */
     var $error_class = 'XML_XSLT_Error';
@@ -214,7 +215,7 @@ class XML_XSLT_Common extends PEAR
     /**
      * Key/Value parameters passed to the XSLT sheet
      * 
-     * @var array $params
+     * @var    array $params
      * @access private
      */
     var $params;
@@ -223,7 +224,7 @@ class XML_XSLT_Common extends PEAR
      * Key/Value options passed to the XSLT command
      * Currenlty not used
      * 
-     * @var array  $options
+     * @var    array  $options
      * @access private
      */
     var $options;
@@ -231,7 +232,7 @@ class XML_XSLT_Common extends PEAR
     /**
      * string or file path
      * 
-     * @var string  $xml
+     * @var    string  $xml
      * @access private
      */
     var $xml = '';
@@ -239,20 +240,22 @@ class XML_XSLT_Common extends PEAR
     /**
      * XSLT sheet
      *
-     * @var string  $xml    string or file path
+     * @var    string  $xml    string or file path
      * @access private
      */
     var $xslt = '';
 
     /**
      * XSL_Mode
-     * @var integer $XSL_Mode       Mode to use for XSL
+     *
+     * @var    integer $XSL_Mode       Mode to use for XSL
      * @access private
      */
     var $XSL_Mode = XML_XSLT_MODE_FILE;
 
     /**
      * XML_Mode
+     *
      * @var integer $XML_Mode       Mode to use for XML
      * @access private
      */
@@ -277,7 +280,7 @@ class XML_XSLT_Common extends PEAR
     var $_initXML_Done = false;
 
     /**
-     * string or file path
+     * String or file path
      *
      * @var string  $result
      */
@@ -393,7 +396,7 @@ class XML_XSLT_Common extends PEAR
     // {{{ setParams
 
     /**
-     * Set the XML data to transform
+     * Set the XML data to transform.
      *
      * @param  string  $data     source origin (file path, URI)
      *                           or XSLT definitions within
@@ -706,10 +709,10 @@ class XML_XSLT_Common extends PEAR
     }
 
     // }}}
-    // {{{ ResultDumpMem
+    // {{{ setOutputMode
 
     /**
-     * Output to the default output
+     * Sets the desired output mode.
      *
      * @param  int    $mode  the desired output mode
      * @param  string $arg   file name or callback function name
