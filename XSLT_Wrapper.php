@@ -18,7 +18,9 @@
 //
 // $Id$
 //
+
 require_once 'PEAR.php';
+
 /**
  * Input modes constants
  */
@@ -34,7 +36,7 @@ define('XML_XSLT_CACHE_XSLT_URI',   false);
 /**
  * Backends names
  */
-define('XML_XSLT_XSLT_CMD', 'XSLT_tty');
+define('XML_XSLT_XSLT_CMD', 'XSLTPROC');
 define('XML_XSLT_XSLT_EXT', 'XSLT_ext');
 define('XML_XSLT_DOM',      'DOM_XSL');
 define('XML_XSLT_SABLOTRON','Sablotron');
@@ -87,7 +89,8 @@ define('XML_XSLT_ERROR_XSLEXEC_ERROR',      -4003);
  * @see http://pear.php.net/ for releases and cvs
  * @see http://www.pearfr.org/xstl_wrapper/ for docs & snapshots
  */
-class XML_XSLT_Wrapper{
+class XML_XSLT_Wrapper
+{
     // {{{ XML_XSLT_Wrapper
     /**
      * Factory
@@ -97,9 +100,10 @@ class XML_XSLT_Wrapper{
      * @return mixed a newly created XSLT object, or a XSLT error code on
      * @see backend
      */
-    function &factory( $backend ){
+    function &factory( $backend )
+    {
         include_once "XML/XSLT/Wrapper/Backend/$backend.php";
-        $classname = 'XML_XSLT_Backend_'.$backend;
+        $classname = 'XML_XSLT_Backend_' . $backend;
         if (!class_exists($classname)) {
             include_once 'PEAR.php';
             return PEAR::raiseError(null, XML_XSLT_ERROR_BACKEND_NOTFOUND,
@@ -119,7 +123,8 @@ class XML_XSLT_Wrapper{
      * @return mixed return
      * @see backend
      */
-    function Init( $options){
+    function Init( $options)
+    {
         return $obj;
     }
 
@@ -190,7 +195,8 @@ class XML_XSLT_Wrapper{
  * @package XML_XSLT_Wrapper
  * @author Pierre-Alain Joye  <pajoye@pearfr.org>
  */
-class XML_XSLT_Common {
+class XML_XSLT_Common
+{
     /**
      * Defines if the backend works in a shell
      * @var boolean  $_console_mode
@@ -313,9 +319,10 @@ class XML_XSLT_Common {
      * @return mixed return
      * @see backend
      */
-    function setXML($data="", $mode=XML_XSLT_MODE_STRING, $options=null){
+    function setXML($data = '', $mode = XML_XSLT_MODE_STRING, $options = null)
+    {
         $error  = false;
-        if (strlen($data)){
+        if (strlen($data)) {
             $this->XML_Mode = $mode;
             switch($mode){
                 case XML_XSLT_MODE_STRING:
@@ -323,12 +330,12 @@ class XML_XSLT_Common {
                     break;
                 case XML_XSLT_MODE_FILE:
                         if(file_exists($data)){
-                            $this->xml  = $this->_console_mode?
-                                            escapeshellarg($data):$data;
+                            $this->xml  = $this->_console_mode ?
+                                            escapeshellarg($data) : $data;
                         } else {
                             $error      = true;
                             $error_code = XML_XSLT_ERROR_XMLFILE_NOTFOUND;
-                            $error_user = 'Failed to load `'.$data.'`';
+                            $error_user = 'Failed to load `' . $data . '`';
                         }
                     break;
                 case XML_XSLT_MODE_URI:
@@ -337,14 +344,14 @@ class XML_XSLT_Common {
                 default:
                     $error      = true;
                     $error_code = XML_XSLT_ERROR_UNKNOWN_MODE;
-                    $error_user = 'Unknown Input mode `'.$mode.'`';
+                    $error_user = 'Unknown Input mode `' . $mode.'`';
             }
         } else {
                     $error      = true;
                     $error_code = XML_XSLT_ERROR_XML_EMPTY;
                     $error_user = 'Missed XML data ';
         }
-        if ( $error ){
+        if ($error){
             $this->error = PEAR::raiseError(null, $error_code, null, null,
                     $error_user,
                     $this->error_class, true);
@@ -365,7 +372,8 @@ class XML_XSLT_Common {
      * @access public
      * @return mixed return
      */
-    function setXSL($data="", $mode=XML_XSLT_MODE_FILE,$options=null){
+    function setXSL($data="", $mode=XML_XSLT_MODE_FILE,$options=null)
+    {
         $error  = false;
         if($data!=""){
             $this->XSL_Mode = $mode;
@@ -380,7 +388,7 @@ class XML_XSLT_Common {
                         } else {
                             $error      = true;
                             $error_code = XML_XSLT_ERROR_XSLFILE_NOTFOUND;
-                            $error_user = 'Failed to load `'.$data.'`';
+                            $error_user = 'Failed to load `' . $data.'`';
                         }
                     break;
                 case XML_XSLT_MODE_URI:
@@ -389,14 +397,14 @@ class XML_XSLT_Common {
                 default:
                     $error      = true;
                     $error_code = XML_XSLT_ERROR_UNKNOWN_MODE;
-                    $error_user = 'Unknown input mode `'.$mode.'`';
+                    $error_user = 'Unknown input mode `' . $mode.'`';
             }
         } else {
             $error      = true;
             $error_code = XML_XSLT_ERROR_XSL_EMPTY;
             $error_user = 'Missed XSL data';
         }
-        if ( $error ){
+        if ($error){
             echo "Error in XSL";
             $this->error = PEAR::raiseError(null, $error_code, null, null,
                     $error_user,
@@ -417,7 +425,8 @@ class XML_XSLT_Common {
      * @return mixed return
      * @see backend
      */
-    function setParams($params){
+    function setParams($params)
+    {
         foreach( $params as $param => $value ){
             if( is_string($param) && strlen($param) || is_numeric($param) ){
                 $this->options[$param] = $value;
@@ -431,29 +440,28 @@ class XML_XSLT_Common {
     /**
      * Set one parameter for XSLT
      *
-     * @param  string  $backend name of the backend
+     * @param  string  $param  parameter name
+     * @param  mixed   $value  parameter vamue
      * @access public
-     * @return boolean
-     * @see backend
      */
-    function setParam($param, $value){
+    function setParam($param, $value)
+    {
         if( is_string($param) &&  strlen($param) ){
-            $this->params[$param]    = $value;
+            $this->params[$param] = $value;
         }
     }
 
     // }}}
     // {{{ setOutputEconding
 
-    /**
+   /**
      * Set the output encoding (does not work with all backend)
      *
-     * @param  string  $backend name of the backend
+     * @param  string  $encode  type of encoding
      * @access public
-     * @return boolean
-     * @see backend
      */
-    function setOutputEconding($encode=''){
+    function setOutputEconding($encode = '')
+    {
         $this->outputEncoding   = $encode;
     }
 
@@ -463,12 +471,13 @@ class XML_XSLT_Common {
     /**
      * Defines the options for the active backend
      *
-     * @param  string  $backend name of the backend
+     * @param  array  $options  the options to set
      * @access public
      * @return boolean
      * @see backend
      */
-    function setOptions($options){
+    function setOptions($options)
+    {
         foreach( $options as $option => $value ){
             if(is_string($option) && strlen($option)){
                 $this->options[$option] = $value;
@@ -489,9 +498,10 @@ class XML_XSLT_Common {
      *
      * @return boolean
      */
-    function setOption($option, $value){
+    function setOption($option, $value)
+    {
         if(is_string($option) &&  strlen($option)){
-            $this->params[$option]    = $value;
+            $this->params[$option] = $value;
         }
     }
 
@@ -506,7 +516,8 @@ class XML_XSLT_Common {
      * @return mixed return
      * @see backend
      */
-    function _getFileContent($path){
+    function _getFileContent($path)
+    {
         if($fd = @fopen ($path, "r")){
             while (!feof ($fd)) {
                 $buffer .= fgets($fd, 4096);
@@ -516,7 +527,7 @@ class XML_XSLT_Common {
         } else {
             $this->error = PEAR::raiseError(null, XML_XSLT_ERROR_FILE_FAILED,
                                 null, null,
-                                'Cannot open file `'.$path.'`',
+                                'Cannot open file `' . $path.'`',
                                 $this->error_class, true
                             );
             return '';
@@ -534,7 +545,8 @@ class XML_XSLT_Common {
      * @return mixed return
      * @see backend
      */
-    function _getURIContent($uri){
+    function _getURIContent($uri)
+    {
         return $this->_getFileContent($uri);
     }
 
@@ -549,7 +561,8 @@ class XML_XSLT_Common {
      * @access private
      * @return mixed return
      */
-    function _saveResult($filepath=''){
+    function _saveResult($filepath='')
+    {
         if($fd = @fopen ($filepath, "wb+")){
             fputs($fd, $this->result);
             fclose ($fd);
@@ -557,7 +570,7 @@ class XML_XSLT_Common {
         }
         $this->error = PEAR::raiseError(null, XML_XSLT_ERROR_FILE_FAILED,
                             null, null,
-                            'Cannot write file `'.$data.'`',
+                            'Cannot write file `' . $data.'`',
                             $this->error_class, true
                         );
         return false;
@@ -573,7 +586,8 @@ class XML_XSLT_Common {
      * @access private
      * @return mixed return
      */
-    function _saveTempData($data){
+    function _saveTempData($data)
+    {
         include_once 'System.php';
         $tempfile = System::mktemp("pxslt_");
         if(!PEAR::isError( $tempfile )){
@@ -585,7 +599,7 @@ class XML_XSLT_Common {
         }
         $this->error = PEAR::raiseError(null, XML_XSLT_ERROR_TMPFILE_FAILED,
                             null, null,
-                            'Cannot write file `'.$tempfile.'`',
+                            'Cannot write file `' . $tempfile . '`',
                             $this->error_class, true
                         );
         return false;
@@ -601,7 +615,8 @@ class XML_XSLT_Common {
      * @access private
      * @return mixed return
      */
-    function _removeTempData(){
+    function _removeTempData()
+    {
         include_once 'System.php';
         $tempfile = System::_removeTmpFiles();
     }
@@ -617,7 +632,8 @@ class XML_XSLT_Common {
      * @return boolean
      * @see backend
      */
-    function setOuputMode( $mode=XSLT_OUTPUT_MEM, $arg='' ){
+    function setOuputMode( $mode=XSLT_OUTPUT_MEM, $arg='' )
+    {
         if( $mode=XSLT_OUTPUT_FILE ){
             $this->outputFile = $arg;
         }
@@ -641,7 +657,8 @@ class XML_XSLT_Common {
      * @return boolean
      * @see backend
      */
-    function ResultDumpFile(){
+    function ResultDumpFile()
+    {
     }
 
     // }}}
@@ -655,7 +672,8 @@ class XML_XSLT_Common {
      * @return string
      * @see backend
      */
-    function ResultDumpMem(){
+    function ResultDumpMem()
+    {
         return false;
     }
 
@@ -670,7 +688,8 @@ class XML_XSLT_Common {
      * @return boolean
      * @see backend
      */
-    function ResultDumpOut(){
+    function ResultDumpOut()
+    {
         return false;
     }
 
@@ -685,7 +704,8 @@ class XML_XSLT_Common {
      * @return mixed return
      * @see backend
      */
-    function batchXML( $options ){
+    function batchXML( $options )
+    {
         return false;
     }
 
@@ -700,7 +720,8 @@ class XML_XSLT_Common {
      * @return mixed return
      * @see backend
      */
-    function batchXSL( $options ){
+    function batchXSL($options, $singleoutput = false)
+    {
         return false;
     }
 
@@ -736,7 +757,7 @@ class XML_XSLT_Common {
                 $this->error = PEAR::raiseError(null,
                                     XML_XSLT_ERROR_MKDIR_FAILED,
                                     null, null,
-                                    'Cannot create folder `'.$dir.'`',
+                                    'Cannot create folder `' . $dir.'`',
                                     $this->error_class, true
                                 );
                 $return = false;

@@ -25,8 +25,8 @@
  * @package  XSLT_Wrapper
  * @author Pierre-Alain Joye  <pajoye@pearfr.org>
  */
-class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
-
+class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common
+{
     /**
      * _xsldom
      *
@@ -63,8 +63,9 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function XML_XSLT_Backend_MSXSL_Com (){
-        if ( !(OS_WINDOWS && $this->_xsltcom = new COM("MSXML2.XSLTemplate.4.0")) ){
+    function XML_XSLT_Backend_MSXSL_Com ()
+    {
+        if (!(OS_WINDOWS && $this->_xsltcom = new COM("MSXML2.XSLTemplate.4.0"))){
             return PEAR::raiseError(null, XML_XSLT_ERROR_BACKEND_FAILED,
                         null, null, 'You need the COM extension to run this Backend', 'XML_XSLT_Error', true);
         }
@@ -80,11 +81,12 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @access privat
      * @see backend
      */
-    function _buildParams(){
+    function _buildParams()
+    {
         $arg_params = '';
-        if( !is_null($this->params) ){
+        if (!is_null($this->params)) {
             $parms = $this->params;
-            foreach($parms as $name=>$value){
+            foreach ($parms as $name => $value) {
                 $this->xslproc->addParameter($name, $value);
             }
         }
@@ -100,16 +102,17 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function &_loadDOM( $data,$mode ){
+    function &_loadDOM( $data,$mode )
+    {
         $dom = new COM("MSXML2.FreeThreadedDOMDocument.4.0");
-        if($mode==XML_XSLT_MODE_STRING){
+        if ($mode==XML_XSLT_MODE_STRING) {
             $result=$dom->loadXML($data);
             if (!$dom->loadXML($data)){
                 $this->_error($dom);
                 $this->error = PEAR::raiseError(null,
                         XML_XSLT_ERROR_XSMPARSER_ERROR,
                         null, null,
-                        'Error: '.$this->error_code .':'.
+                        'Error: ' . $this->error_code .':'.
                         $this->error_message,
                         $this->error_class, true
                         );
@@ -121,7 +124,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                 $this->error = PEAR::raiseError(null,
                         XML_XSLT_ERROR_XMLPARSER_ERROR,
                         null, null,
-                        'Error: '.$this->error_code .':'.
+                        'Error: ' . $this->error_code .':'.
                         $this->error_message,
                         $this->error_class, true
                         );
@@ -141,8 +144,9 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function _initXSL(){
-        if($this->_xsldom = $this->_loadDOM($this->xslt,$this->XSL_Mode)){
+    function _initXSL()
+    {
+        if ($this->_xsldom = $this->_loadDOM($this->xslt,$this->XSL_Mode)) {
             $this->_xsldom->async = false;
             $this->_initXSL_Done = true;
             return true;
@@ -163,8 +167,9 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function _initXML(){
-        if($this->_xmldom = $this->_loadDOM($this->xml,$this->XML_Mode)){
+    function _initXML()
+    {
+        if ($this->_xmldom = $this->_loadDOM($this->xml,$this->XML_Mode)) {
             $this->_xmldom->async = false;
             $this->_initXML_Done = true;
             return true;
@@ -185,25 +190,26 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @access public
      * @return mixed return
      */
-    function process(){
-        if( !$this->_initXSL_Done  ){
-            if(!$this->_initXSL()){
+    function process()
+    {
+        if (!$this->_initXSL_Done) {
+            if (!$this->_initXSL()) {
                 return false;
             }
         }
-        if( !$this->_initXML_Done ){
-            if(!$this->_initXML() ){
+        if (!$this->_initXML_Done) {
+            if (!$this->_initXML()) {
                 return false;
             }
         }
-        if(is_null($this->params)){
+        if (is_null($this->params)) {
             $this->result   = $xmldoc->transformNode($this->_xsldom);
         } else {
             $this->_xsltcom->stylesheet =  $this->_xsldom;
             $this->xslproc = $this->_xsltcom->createProcessor();
             $this->xslproc->input       = $this->_xmldom;
             $this->_buildParams();
-            if($this->xslproc->transform()){
+            if ($this->xslproc->transform()) {
                 $this->result = $this->xslproc->output;
                 return true;
             } else {
@@ -211,7 +217,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                 $this->error = PEAR::raiseError(null,
                         XML_XSLT_ERROR_XSLPARSER_ERROR,
                         null, null,
-                        'Error: '.$this->error_code .':'.
+                        'Error: ' . $this->error_code .':'.
                         $this->error_message,
                         $this->error_class, true
                         );
@@ -233,9 +239,10 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function ResultDumpMem($free=true){
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            if($free){
+    function ResultDumpMem($free=true)
+    {
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            if ($free) {
                 $this->free();
             }
             return $this->result;
@@ -256,9 +263,10 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function ResultDumpFile($output_file='',$free=true){
+    function ResultDumpFile($output_file='',$free=true)
+    {
         $result = $this->_saveResult($output_file);
-        if($free){
+        if ($free) {
             $this->free();
         }
         return $result;
@@ -277,10 +285,11 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function ResultDumpOut($free=true){
-        if($this->_initXSL_Done && $this->_initXSL_Done){
+    function ResultDumpOut($free=true)
+    {
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
             echo $this->result;
-            if($free){
+            if ($free) {
                 $this->free();
             }
             return true;
@@ -299,9 +308,10 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function batchXML($options=null){
+    function batchXML($options=null)
+    {
         $error = false;
-        if(is_null($options)){
+        if (is_null($options)) {
             $this->error = PEAR::raiseError(null,
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
@@ -310,9 +320,9 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                             );
             return false;
         }
-        if( isset($options['outputfolder']) ){
-            if(!is_dir($options['outputfolder'])){
-                if(!$this->_mkdir_p($options['outputfolder'])){
+        if (isset($options['outputfolder'])) {
+            if (!is_dir($options['outputfolder'])) {
+                if (!$this->_mkdir_p($options['outputfolder'])) {
                     return false;
                 }
             }
@@ -326,9 +336,9 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
             return false;
         }
         $dest_dir   = $options['outputfolder'];
-        if(isset($options['xml'])){
+        if (isset($options['xml'])) {
             $xmldoc    = new COM("Msxml2.DOMDocument.4.0");
-            if($options['xml'][0]=='<'){
+            if ($options['xml'][0]=='<') {
                 $mode = XML_XSLT_MODE_STRING;
                 $xmldoc->loadXML($options['xml']);
             }else{
@@ -349,10 +359,10 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                                 $this->error_class, true
                             );
         }
-        if(isset($options['xslt_files']) && is_array($options['xslt_files'])){
+        if (isset($options['xslt_files']) && is_array($options['xslt_files'])) {
             $xsl_files = $options['xslt_files'];
             $xslt_args = '';
-            foreach($xsl_files as $xslt_file=>$xslt){
+            foreach ($xsl_files as $xslt_file => $xslt) {
                 $xsldoc             = new COM("Msxml2.FreeThreadedDOMDocument.4.0");
                 $xsldoc->async      = false;
                 $xsldoc->load($xslt['filepath']);
@@ -367,7 +377,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                     return false;
                 }
                 $this->result   = $xmldoc->transformNode($xsldoc);
-                $this->ResultDumpFile($dest_dir.'/'.$xslt['outputfile'],false);
+                $this->ResultDumpFile($dest_dir.'/' . $xslt['outputfile'],false);
             }
         } else {
             $this->error = PEAR::raiseError(null,
@@ -392,9 +402,10 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function batchXSL($options=null){
+    function batchXSL($options=null)
+    {
         $error = false;
-        if(is_null($options)){
+        if (is_null($options)) {
             $this->error = PEAR::raiseError(null,
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
@@ -403,9 +414,9 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                             );
             return false;
         }
-        if( isset($options['outputfolder']) ){
-            if(!is_dir($options['outputfolder'])){
-                if(!$this->_mkdir_p($options['outputfolder'])){
+        if (isset($options['outputfolder'])) {
+            if (!is_dir($options['outputfolder'])) {
+                if (!$this->_mkdir_p($options['outputfolder'])) {
                     return false;
                 }
             }
@@ -419,22 +430,22 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
             return false;
         }
         $dest_dir   = $options['outputfolder'];
-        if(isset($options['xslt'])){
+        if (isset($options['xslt'])) {
             $xsldoc    = new COM("Msxml2.DOMDocument.4.0");
             $xsldoc->async = false;
-            if($options['xslt'][0]=='<'){
+            if ($options['xslt'][0]=='<') {
                 $xsldoc->loadXML($options['xslt']);
             } else {
                 $xsldoc->load($options['xslt']);
             }
         }
-        if(isset($options['xml_datas']) && is_array($options['xml_datas'])){
+        if (isset($options['xml_datas']) && is_array($options['xml_datas'])) {
             $xml_files = $options['xml_datas'];
             $xml_args = '';
-            foreach($xml_files as $xml_file=>$xml){
+            foreach ($xml_files as $xml_file => $xml) {
                 $xmldoc    = new COM("Msxml2.DOMDocument.4.0");
                 $xmldoc->async = false;
-                if($xml['data'][0]=='<'){
+                if ($xml['data'][0]=='<') {
                     $xmldoc->loadXML($xml['data']);
                 } else {
                     $xmldoc->load($xml['data']);
@@ -443,7 +454,7 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
                     $this->_error($xmldoc);
                     return false;
                 }
-                $this->ResultDumpFile($dest_dir.'/'.$xml['outputfile'],false);
+                $this->ResultDumpFile($dest_dir.'/' . $xml['outputfile'],false);
             }
         } else {
             $this->error = PEAR::raiseError(null,
@@ -468,7 +479,8 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function _error( &$domxml ){
+    function _error( &$domxml )
+    {
         $msg = 'Error Code:' . $domxml->parseError->errorCode."\n";
         $msg .= 'Reason: ' . $domxml->parseError->reason."";
         $msg .= 'URL: ' . $domxml->parseError->url."\n";
@@ -489,7 +501,8 @@ class XML_XSLT_Backend_MSXSL_Com extends XML_XSLT_Common{
      * @access public
      * @return mixed return
      */
-    function free(){
+    function free()
+    {
         unset($this->_xsltcom);
         unset($this->_xmlcom);
         unset($this->xslproc);

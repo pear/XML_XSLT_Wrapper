@@ -19,8 +19,8 @@
 // $Id$
 //
 
-class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
-
+class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common
+{
     /**
      * _hXSLT
      *
@@ -56,11 +56,12 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function XML_XSLT_Backend_Sablotron (){
-        if(!defined( 'XSLT_SAXON_CMD' )){
+    function XML_XSLT_Backend_Sablotron ()
+    {
+        if (!defined( 'XSLT_SAXON_CMD')) {
             include_once 'System/Command.php';
             $cmd = escapeshellcmd(System_Command::which('sabcmd'));
-            if($cmd!=''){
+            if ($cmd!='') {
                 define('XSLT_SAXON_CMD', $cmd);
             } else {
                 return PEAR::raiseError();
@@ -80,15 +81,16 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function _buildParams(){
+    function _buildParams()
+    {
         $arg_params = '';
-        if( !is_null($this->params) ){
+        if (!is_null($this->params)) {
             $parms = $this->params;
-            foreach($parms as $name=>$value){
-                if(is_string($value)){
+            foreach ($parms as $name => $value) {
+                if (is_string($value)) {
                     $value = "'".escapeshellcmd($value)."'";
                 }
-                $arg_params .= '$'.$name."=$value ";
+                $arg_params .= '$' . $name."=$value ";
             }
         }
         return $arg_params;
@@ -105,7 +107,8 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function initXSL(){
+    function initXSL()
+    {
         switch( $this->XSL_Mode ){
             case XML_XSLT_MODE_STRING:
                     $this->_arguments['/_xsl'] = $this->xslt;
@@ -113,13 +116,13 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
                 break;
             case XML_XSLT_MODE_FILE:
                     $this->arg_xsl  = $this->xslt;
-                    if ( isset($this->_arguments['_xsl']) ){
+                    if (isset($this->_arguments['_xsl'])){
                         unset($this->_arguments['_xsl']);
                     }
                 break;
             case XML_XSLT_MODE_URI:
                      $this->arg_xsl  = $this->xslt;
-                    if ( isset($this->_arguments['_xsl']) ){
+                    if (isset($this->_arguments['_xsl'])){
                         unset($this->_arguments['_xsl']);
                     }
                 break;
@@ -147,7 +150,8 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function initXML(){
+    function initXML()
+    {
         switch( $this->XML_Mode ){
             case XML_XSLT_MODE_STRING:
                     $this->arg_xml    = $this->_saveTempData($this->xml);
@@ -183,14 +187,15 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function process(){
-        if(!$this->_initXML_Done){
-            if ( !$this->initXML() ){
+    function process()
+    {
+        if (!$this->_initXML_Done) {
+            if (!$this->initXML()){
                 return false;
             }
         }
-        if( !$this->_initXSL_Done){
-            if ( !$this->initXSL() ){
+        if ( !$this->_initXSL_Done) {
+            if (!$this->initXSL()){
                 return false;
             }
         }
@@ -209,22 +214,23 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @access public
      * @return mixed return
      */
-    function ResultDumpMem($free=true){
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            exec(   XSLT_SAXON_CMD.' '.$this->xslt.' '.' '.$this->arg_xml.' '.
-                    " '".$this->_buildParams()."'",
+    function ResultDumpMem($free=true)
+    {
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            exec(   XSLT_SAXON_CMD.' ' . $this->xslt.' ' . ' ' . $this->arg_xml.' '.
+                    " '" . $this->_buildParams()."'",
                     $result,$return_code
                 );
-            if($free){
+            if ($free) {
                 $this->free();
             }
-            if($return_code==0){
+            if ($return_code==0) {
                 return( implode("\n",$result) );
             } else {
                 $this->error = PEAR::raiseError(null,
                                     XML_XSLT_ERROR_XSLEXEC_ERROR,
                                     null, null,
-                                    'Command returned: '.$return_code,
+                                    'Command returned: ' . $return_code,
                                     $this->error_class, true
                                 );
                 return '';
@@ -248,25 +254,26 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @access public
      * @return mixed return
      */
-    function ResultDumpFile($outputFile='',$free=true){
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            if($outputFile==''){
+    function ResultDumpFile($outputFile='',$free=true)
+    {
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            if ($outputFile=='') {
                 $outputFile = escapeshellarg('pxslt_'.time());
             }
-            exec( XSLT_SAXON_CMD.' '.$this->xslt ." " . $this->arg_xml .
-                    " '".$this->_buildParams()."' >".$outputFile,
+            exec( XSLT_SAXON_CMD.' ' . $this->xslt ." " . $this->arg_xml .
+                    " '" . $this->_buildParams()."' >" . $outputFile,
                     $messages,$return_code
                 );
-            if($free){
+            if ($free) {
                 $this->free();
             }
-            if($return_code==0){
+            if ($return_code==0) {
                 return $outputFile;
             } else {
                 $this->error = PEAR::raiseError(null,
                                     XML_XSLT_ERROR_XSLEXEC_ERROR,
                                     null, null,
-                                    'Command returned: '.$return_code,
+                                    'Command returned: ' . $return_code,
                                     $this->error_class, true
                                 );
                 return false;
@@ -288,19 +295,20 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @access public
      * @return mixed return
      */
-    function ResultDumpOut($free=true){
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            if( $this->XML_Mode==XML_XSLT_MODE_STRING ){
-                $command_pipe = popen ("sabcmd ". $this->xslt ." ".'file://stdin $numberofcols=3',"w");
+    function ResultDumpOut($free=true)
+    {
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            if ($this->XML_Mode==XML_XSLT_MODE_STRING) {
+                $command_pipe = popen ("sabcmd ". $this->xslt ." " . 'file://stdin $numberofcols=3',"w");
                 fwrite ($command_pipe,$this->xml);
                 pclose ($command_pipe);
             } else {
                 passthru(   XSLT_SAXON_CMD.' '. $this->xslt ." " . $this->xml  .
-                            " '".$this->_buildParams()."' "
+                            " '" . $this->_buildParams()."' "
 
                         );
             }
-            if($free){
+            if ($free) {
                 $this->free();
             }
             return true;
@@ -319,8 +327,9 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function batchXML($options=null){
-        if(is_null($options)){
+    function batchXML($options=null)
+    {
+        if (is_null($options)) {
             $this->error = PEAR::raiseError(null,
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
@@ -329,9 +338,9 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
                             );
             return false;
         }
-        if( isset($options['outputfolder']) ){
-            if(!is_dir($options['outputfolder'])){
-                if(!$this->_mkdir_p($options['outputfolder'])){
+        if (isset($options['outputfolder'])) {
+            if (!is_dir($options['outputfolder'])) {
+                if (!$this->_mkdir_p($options['outputfolder'])) {
                     return false;
                 }
             }
@@ -345,7 +354,7 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
             return false;
         }
         $dest_dir   = $options['outputfolder'];
-        if(isset($options['xml'])){
+        if (isset($options['xml'])) {
             $mode       = $options['xml'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
             if (!$this->setXML($options['xml'],$mode)){
@@ -361,26 +370,26 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
                             );
             return false;
         }
-        if(isset($options['xslt_files']) && is_array($options['xslt_files'])){
+        if (isset($options['xslt_files']) && is_array($options['xslt_files'])) {
             $xsl_files = $options['xslt_files'];
             $xslt_args = '';
-            foreach($xsl_files as $xslt_file=>$xslt){
+            foreach ($xsl_files as $xslt_file => $xslt) {
                 $xslt_args .= ' '.escapeshellarg($xslt['filepath']) . ' '.
                               $dest_dir.$xslt['outputfile'];
             }
-            exec( XSLT_SAXON_CMD.' -x '.$this->arg_xml ." " . $xslt_args .
-                    " '".$this->_buildParams()."' ",
+            exec( XSLT_SAXON_CMD.' -x ' . $this->arg_xml ." " . $xslt_args .
+                    " '" . $this->_buildParams()."' ",
                     $messages,$return_code
                 );
         }
         $this->free();
-        if($return_code==0){
+        if ($return_code==0) {
             return true;
         } else {
             $this->error = PEAR::raiseError(null,
                                 XML_XSLT_ERROR_XSLEXEC_ERROR,
                                 null, null,
-                                'Command returned: '.$return_code,
+                                'Command returned: ' . $return_code,
                                 $this->error_class, true
                             );
             return false;
@@ -397,13 +406,14 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function batchXSL($options=null){
-        if(is_null($options)){
+    function batchXSL($options=null)
+    {
+        if (is_null($options)) {
             return false;
         }
-        if( isset($options['outputfolder']) ){
-            if(!is_dir($options['outputfolder'])){
-                if(!$this->_mkdir_p($options['outputfolder'])){
+        if (isset($options['outputfolder'])) {
+            if (!is_dir($options['outputfolder'])) {
+                if (!$this->_mkdir_p($options['outputfolder'])) {
                     return false;
                 }
             }
@@ -417,7 +427,7 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
             return false;
         }
         $dest_dir   = $options['outputfolder'];
-        if(isset($options['xslt'])){
+        if (isset($options['xslt'])) {
             if (!$this->setXSL($options['xslt'],XML_XSLT_MODE_FILE)){
                 return false;
             }
@@ -431,13 +441,13 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
                             );
             return false;
         }
-        if(isset($options['xml_datas']) && is_array($options['xml_datas'])){
+        if (isset($options['xml_datas']) && is_array($options['xml_datas'])) {
             $xml_files = $options['xml_datas'];
             $xml_args = '';
-            foreach($xml_files as $xml_file=>$xml){
+            foreach ($xml_files as $xml_file => $xml) {
                 $mode       = $xml['data'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
-                if($xml['data'][0]=='<'){
+                if ($xml['data'][0]=='<') {
                     $xmlfile    = $this->_saveTempData($xml['data']);
                 } else {
                     $xmlfile    = $xml['data'];
@@ -445,19 +455,19 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
                 $xml_args   .= ' '.escapeshellarg($xmlfile) . ' '.
                                 $dest_dir.$xml['outputfile'];
             }
-            exec( XSLT_SAXON_CMD.' -s '.$this->arg_xsl ." " . $xml_args .
-                    " '".$this->_buildParams()."' ",
+            exec( XSLT_SAXON_CMD.' -s ' . $this->arg_xsl ." " . $xml_args .
+                    " '" . $this->_buildParams()."' ",
                     $messages,$return_code
                 );
         }
         $this->free();
-        if($return_code==0){
+        if ($return_code==0) {
             return true;
         } else {
             $this->error = PEAR::raiseError(null,
                                 XML_XSLT_ERROR_XSLEXEC_ERROR,
                                 null, null,
-                                'Command returned: '.$return_code,
+                                'Command returned: ' . $return_code,
                                 $this->error_class, true
                             );
             return false;
@@ -474,7 +484,8 @@ class XML_XSLT_Backend_Sablotron extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function free(){
+    function free()
+    {
         $this->_removeTempData();
     }
 

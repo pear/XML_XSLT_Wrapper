@@ -19,8 +19,8 @@
 // $Id$
 //
 
-class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
-
+class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
+{
     /**
      * _hXSLT
      *
@@ -44,7 +44,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * string  filepath or 'arg:' format
      * @access privat
      */
-    var $_arguments=null;
+    var $_arguments = null;
 
     /**
      * _XSL
@@ -72,7 +72,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function Backend_XSLT_ext (){
+    function Backend_XSLT_ext ()
+    {
         if (!function_exists('xslt_create')) {
             include_once('PEAR.php');
             if (!PEAR::loadExtension('xslt')) {
@@ -94,7 +95,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function buildParams(){
+    function buildParams()
+    {
         // do not need to build them
     }
 
@@ -108,8 +110,9 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @access public
      * @return mixed return
      */
-    function _initXSL(){
-        if( $this->hXSLT    = xslt_create() ){
+    function _initXSL()
+    {
+        if ($this->hXSLT    = xslt_create()) {
             switch( $this->XSL_Mode ){
                 case XML_XSLT_MODE_STRING:
                         $this->_arguments['/_xsl'] = &$this->xslt;
@@ -117,13 +120,13 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                     break;
                 case XML_XSLT_MODE_FILE:
                         $this->arg_xsl  = $this->xslt;
-                        if ( isset($this->_arguments['_xsl']) ){
+                        if (isset($this->_arguments['_xsl'])){
                             unset($this->_arguments['_xsl']);
                         }
                     break;
                 case XML_XSLT_MODE_URI:
                         $this->arg_xsl  = $this->xslt;
-                        if ( isset($this->_arguments['_xsl']) ){
+                        if (isset($this->_arguments['_xsl'])){
                             unset($this->_arguments['_xsl']);
                         }
                     break;
@@ -154,7 +157,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function _initXML(){
+    function _initXML()
+    {
         switch( $this->XML_Mode ){
             case XML_XSLT_MODE_STRING:
                     $this->_arguments['/_xml'] = &$this->xml;
@@ -162,13 +166,13 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                 break;
             case XML_XSLT_MODE_FILE:
                     $this->arg_xml  = $this->xml;
-                    if ( isset($this->_arguments['_xml']) ){
+                    if (isset($this->_arguments['_xml'])){
                         unset($this->_arguments['_xml']);
                     }
                 break;
             case XML_XSLT_MODE_URI:
                     $this->arg_xml  = $this->xml;
-                    if ( isset($this->_arguments['_xml']) ){
+                    if (isset($this->_arguments['_xml'])){
                         unset($this->_arguments['_xml']);
                     }
                 break;
@@ -197,14 +201,15 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function process(){
-        if( !$this->_initXSL_Done  ){
-            if(!$this->_initXSL()){
+    function process()
+    {
+        if (!$this->_initXSL_Done) {
+            if (!$this->_initXSL()) {
                 return false;
             }
         }
-        if( !$this->_initXML_Done ){
-            if(!$this->_initXML() ){
+        if (!$this->_initXML_Done) {
+            if (!$this->_initXML()) {
                 return false;
             }
         }
@@ -222,14 +227,15 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function ResultDumpOut($free=true){
+    function ResultDumpOut($free=true)
+    {
         $error = false;
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            if($this->error_code==0){
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            if ($this->error_code==0) {
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?$this->_arguments:array();
-                if( $this->result=xslt_process($this->hXSLT, $this->arg_xml, $this->arg_xsl, null, $args, $this->params) ){
+                if ($this->result=xslt_process($this->hXSLT, $this->arg_xml, $this->arg_xsl, null, $args, $this->params)) {
                     echo $this->result;
-                    if($free){
+                    if ($free) {
                         $this->free();
                     }
                 } else {
@@ -240,7 +246,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                 }
             }
         }
-        if( $error ){
+        if ($error) {
             $this->error = PEAR::raiseError(null,
                             $error_code,
                             null, null,
@@ -264,16 +270,17 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function ResultDumpMem($free=true){
+    function ResultDumpMem($free=true)
+    {
         $result = '';
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            if($this->error_code==0){
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            if ($this->error_code==0) {
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?
                         $this->_arguments:array();
                 $result = @xslt_process($this->hXSLT, $this->arg_xml,
                             $this->arg_xsl, null, $args, $this->params);
                 if ($result){
-                    if($free){
+                    if ($free) {
                         $this->free();
                     }
                 } else {
@@ -301,11 +308,12 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @see backend
      */
-    function ResultDumpFile($output_file='',$free=true){
+    function ResultDumpFile($output_file='',$free=true)
+    {
         $error = false;
-        if($this->_initXSL_Done && $this->_initXSL_Done){
-            if($this->error_code==0){
-                if( $output_file=='' ){
+        if ($this->_initXSL_Done && $this->_initXSL_Done) {
+            if ($this->error_code==0) {
+                if ($output_file=='') {
                     $output_file = $this->outputFile;
                 }
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?
@@ -315,7 +323,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                 $result = xslt_process($this->hXSLT, $this->arg_xml,
                             $this->arg_xsl, $output_file,
                             $args, $params);
-                if( !$result ){
+                if (!$result) {
                     $this->error = PEAR::raiseError(null,
                                     XML_XSLT_ERROR_XSLEXEC_ERROR,
                                     null, null,
@@ -325,7 +333,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                                 );
                     $error = true;
                 }
-                if($free){
+                if ($free) {
                     $this->free();
                 }
             }
@@ -345,9 +353,10 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function batchXML($options=null){
+    function batchXML($options=null)
+    {
         $error = false;
-        if(is_null($options)){
+        if (is_null($options)) {
             $this->error = PEAR::raiseError(null,
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
@@ -356,9 +365,9 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                             );
             return false;
         }
-        if( isset($options['outputfolder']) ){
-            if(!is_dir($options['outputfolder'])){
-                if(!$this->_mkdir_p($options['outputfolder'])){
+        if (isset($options['outputfolder'])) {
+            if (!is_dir($options['outputfolder'])) {
+                if (!$this->_mkdir_p($options['outputfolder'])) {
                     return false;
                 }
             }
@@ -372,7 +381,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
             return false;
         }
         $dest_dir   = $options['outputfolder'];
-        if(isset($options['xml'])){
+        if (isset($options['xml'])) {
             $mode       = $options['xml'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
             if (!$this->setXML($options['xml'],$mode)){
@@ -387,23 +396,23 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
                                 $this->error_class, true
                             );
         }
-        if(isset($options['xslt_files']) && is_array($options['xslt_files'])){
+        if (isset($options['xslt_files']) && is_array($options['xslt_files'])) {
             $xsl_files = $options['xslt_files'];
             $xslt_args = '';
-            foreach($xsl_files as $xslt_file=>$xslt){
-                if ( !$this->setXSL($xslt['filepath'],XML_XSLT_MODE_FILE) ){
+            foreach($xsl_files as $xslt_file => $xslt){
+                if (!$this->setXSL($xslt['filepath'],XML_XSLT_MODE_FILE)){
                     $error = true;
                     break;
                 }
-                if ( !$this->_initXSL() ){
+                if (!$this->_initXSL()){
                     $error = true;
                     break;
                 }
-                if ( !$this->process() ){
+                if (!$this->process()){
                     $error = true;
                     break;
                 }
-                if ( !$this->ResultDumpFile($dest_dir.''.$xslt['outputfile'],false) ){
+                if (!$this->ResultDumpFile($dest_dir.'' . $xslt['outputfile'],false)){
                     $error = true;
                     break;
                 }
@@ -426,14 +435,15 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function batchXSL($options){
+    function batchXSL($options)
+    {
         $error = false;
-        if(is_null($options)){
+        if (is_null($options)) {
             return false;
         }
-        if( isset($options['outputfolder']) ){
-            if(!is_dir($options['outputfolder'])){
-                if(!$this->_mkdir_p($options['outputfolder'])){
+        if (isset($options['outputfolder'])) {
+            if (!is_dir($options['outputfolder'])) {
+                if (!$this->_mkdir_p($options['outputfolder'])) {
                     return false;
                 }
             }
@@ -447,33 +457,33 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
             return false;
         }
         $dest_dir   = $options['outputfolder'];
-        if(isset($options['xslt'])){
-            if ( !$this->setXSL($options['xslt'],XML_XSLT_MODE_FILE) ){
+        if (isset($options['xslt'])) {
+            if (!$this->setXSL($options['xslt'],XML_XSLT_MODE_FILE)){
                     return false;
             }
-            if ( !$this->_initXSL() ){
+            if (!$this->_initXSL()){
                 return false;
             }
         }
-        if(isset($options['xml_datas']) && is_array($options['xml_datas'])){
+        if (isset($options['xml_datas']) && is_array($options['xml_datas'])) {
             $xml_files = $options['xml_datas'];
             $xml_args = '';
-            foreach($xml_files as $xml_file=>$xml){
+            foreach($xml_files as $xml_file => $xml){
                 $mode       = $xml['data'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
-                if ( !$this->setXML($xml['data'],$mode) ){
+                if (!$this->setXML($xml['data'],$mode)){
                     $error = true;
                     break;
                 }
-                if ( !$this->_initXML() ){
+                if (!$this->_initXML()){
                     $error = true;
                     break;
                 }
-                if ( !$this->process() ){
+                if (!$this->process()){
                     $error = true;
                     break;
                 }
-                if( !$this->ResultDumpFile($dest_dir.'/'.$xml['outputfile'],false) ){
+                if (!$this->ResultDumpFile($dest_dir.'/' . $xml['outputfile'],false)) {
                     $error = true;
                     break;
                 }
@@ -494,7 +504,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common{
      * @return mixed return
      * @
      */
-    function free(){
+    function free()
+    {
         xslt_free($this->hXSLT);
     }
 

@@ -8,6 +8,7 @@ It provides :
 * support for :
   - DOM XSLT php extension
   - XSLT php extension
+  - XSLT command line tool (xsltproc)
   - MSXML using COM php extension
   - XT command line (http://www.blnz.com/xt/xt-20020426a-src/index.html)
   - Sablotron command line (http://www.gingerall.com/charlie/ga/act/gadoc.act?pg=sablot#i__1940)
@@ -29,11 +30,13 @@ See http://www.pearfr.org/xslt_wrapper/ for samples and documentation</descripti
     </maintainer>
   </maintainers>
   <release>
-    <version>0.1</version>
-    <date>2002-09-22</date>
+    <version>0.2</version>
+    <date>2002-10-12</date>
     <license>PHP License</license>
     <state>alpha</state>
-    <notes>First public release</notes>
+    <notes>- Add XSLT command line support, xsltproc (Arnaud Limbourg)
+- Apply more CS to the sources (Arnaud)
+- Fix PEAR include (Michal Stochmiale)</notes>
     <filelist>
       <file role="php" baseinstalldir="XML/XSLT" install-as="Wrapper.php" name="XSLT_Wrapper.php"/>
       <file role="doc" baseinstalldir="XML/XSLT" name="TODO"/>
@@ -42,6 +45,7 @@ See http://www.pearfr.org/xslt_wrapper/ for samples and documentation</descripti
       <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/XT.php"/>
       <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/MSXSL_Com.php"/>
       <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/DOM_XSL.php"/>
+      <file role="php" baseinstalldir="XML/XSLT/Wrapper" name="Backend/XSLTPROC.php"/>
       <file role="doc" baseinstalldir="XML/XSLT/Wrapper" name="examples/test.php"/>
       <file role="data" baseinstalldir="XML/XSLT/Wrapper" name="examples/table.xsl"/>
       <file role="data" baseinstalldir="XML/XSLT/Wrapper" name="examples/table2.xsl"/>
