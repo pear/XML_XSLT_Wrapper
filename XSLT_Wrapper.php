@@ -18,7 +18,7 @@
 //
 // $Id$
 //
-include_once '/usr/local/lib/php/PEAR.php';
+require_once 'PEAR.php';
 /**
  * Input modes constants
  */
