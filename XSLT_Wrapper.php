@@ -24,8 +24,10 @@ require_once 'PEAR.php';
 /**
  * Input modes constants
  */
- /**
+
+/**
  * data stored as string variable
+ *
  * @const PEAR_XSLT_MODE_STRING
  */
 define('XML_XSLT_MODE_STRING', 0); // default mode for the XML data
@@ -47,6 +49,7 @@ define('XML_XSLT_MSXSL_COM','MSXSL_com');
 /**
  * Output modes constants
  */
+
 /**
  * Standard output
  * @const XSLT_OUTPUT_STDOUT
@@ -76,7 +79,7 @@ define('XML_XSLT_ERROR_NOOPTIONS',          -2004);
 
 define('XML_XSLT_ERROR_XSLFILE_NOTFOUND',   -3003);
 define('XML_XSLT_ERROR_XMLFILE_NOTFOUND',   -3004);
-define('XML_XSLT_ERROR_LOADXSL_FAILED',     -3004);
+define('XML_XSLT_ERROR_LOADXSL_FAILED',     -3005);
 define('XML_XSLT_ERROR_XMLPARSER_ERROR',    -4001);
 define('XML_XSLT_ERROR_XSLPARSER_ERROR',    -4002);
 define('XML_XSLT_ERROR_XSLEXEC_ERROR',      -4003);
@@ -87,7 +90,7 @@ define('XML_XSLT_ERROR_XSLEXEC_ERROR',      -4003);
  * @since PHP 4.2.1
  * @author Pierre-Alain Joye <paj@pearfr.org>
  * @see http://pear.php.net/ for releases and cvs
- * @see http://www.pearfr.org/xstl_wrapper/ for docs & snapshots
+ * @see http://www.pearfr.org/xslt_wrapper/ for docs & snapshots
  */
 class XML_XSLT_Wrapper
 {
@@ -115,6 +118,7 @@ class XML_XSLT_Wrapper
 
     // }}}
     // {{{ Init
+
     /**
      * Init
      *
