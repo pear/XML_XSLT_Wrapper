@@ -24,7 +24,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * _oXML
      *
-     * object  DOM XML object
+     * @var object  DOM XML object
      * @access private
      */
     var $_oXML;
@@ -32,7 +32,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * _oXSL
      *
-     * object   DOM XSL object
+     * @var object   DOM XSL object
      * @access private
      */
     var $_oXSL;
@@ -46,12 +46,11 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * @access public
      * @return mixed return
      */
-    function XML_XSLT_Backend_DOM_XSL ()
+    function XML_XSLT_Backend_DOM_XSL()
     {
         if (!function_exists('domxml_xslt_stylesheet')) {
             if (!PEAR::loadExtension('domxsl')) {
-                return PEAR::raiseError(null, XML_XSLT_ERROR_BACKEND_FAILED,
-                                    null, null, null, 'XML_XSLT_Error', true);
+                return $this->raiseError(XML_XSLT_ERROR_BACKEND_FAILED);
             }
         }
     }
@@ -85,7 +84,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      */
     function _initXSL()
     {
-        switch( $this->XSL_Mode ){
+        switch($this->XSL_Mode) {
             case XML_XSLT_MODE_STRING:
                     $this->_oXSL = @domxml_xslt_stylesheet($this->xslt);
                 break;
@@ -98,8 +97,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
                 break;
         }
         if (! $this->_oXSL) {
-            return PEAR::raiseError(null, XML_XSLT_ERROR_LOADXSL_FAILED,
-                                null, null, null, 'XML_XSLT_Error', true);
+            return $this->raiseError(XML_XSLT_ERROR_LOADXSL_FAILED);
             return false;
         }
         $this->_initXSL_Done = true;
@@ -118,7 +116,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      */
     function _initXML()
     {
-        switch( $this->XML_Mode ){
+        switch($this->XML_Mode) {
             case XML_XSLT_MODE_STRING:
                     $this->_oXML = @domxml_open_mem($this->xml);
                 break;
@@ -131,8 +129,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
                 break;
         }
         if (!$this->_oXML) {
-            return PEAR::raiseError(null, XML_XSLT_ERROR_XMLPARSER_ERROR,
-                        null, null, 'XSL File:' . $data, 'XML_XSLT_Error', true);
+            return $this->raiseError(XML_XSLT_ERROR_XMLPARSER_ERROR);
             return false;
         }
         $this->_initXML_Done = true;
@@ -143,7 +140,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     // {{{ process
 
     /**
-     * Set the parameters for the active XSL sheet
+     * Process the transformation
      *
      * @access public
      * @return mixed return
@@ -169,8 +166,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
                 $this->result = $this->_oXSL->process($this->_oXML);
             }
             if (!$this->result) {
-                return PEAR::raiseError(null, XML_XSLT_ERROR_PROCESS_FAILED,
-                        null, null, 'XSL File:' . $data, 'XML_XSLT_Error', true);
+                return $this->raiseError(XML_XSLT_ERROR_PROCESS_FAILED);
 
                 return false;
             }
@@ -182,7 +178,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     // {{{ ResultDumpOut
 
     /**
-     * Set the parameters for the active XSL sheet
+     * Dump the result to standard output.
      *
      * @param  boolean  $free Free the ressources
      *                  after transformation
@@ -191,11 +187,11 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * @return mixed return
      * @see backend
      */
-    function ResultDumpOut($free=true)
+    function ResultDumpOut($free = true)
     {
         if (!$this->error_code && $this->_initXSL_Done && $this->_initXML_Done) {
-            if ($this->outputEncoding!=''){
-                echo $this->result->dump_mem(true,$this->outputEncoding);
+            if ($this->outputEncoding != ''){
+                echo $this->result->dump_mem(true, $this->outputEncoding);
             } else {
                 echo $this->result->dump_mem(true);
             }
@@ -208,7 +204,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     // {{{ ResultDumpMem
 
     /**
-     * Set the parameters for the active XSL sheet
+     * Dumps the result to memory
      *
      * @param  boolean  $free Free the ressources
      *                  after transformation
@@ -217,7 +213,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * @return mixed return
      * @see backend
      */
-    function ResultDumpMem($free=true)
+    function ResultDumpMem($free = true)
     {
         if (!$this->error_code && $this->_initXSL_Done && $this->_initXML_Done) {
             if ($this->outputEncoding!=''){
@@ -234,8 +230,9 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     // {{{ ResultDumpFile
 
     /**
-     * Set the parameters for the active XSL sheet
+     * Dumps the result to a file
      *
+     * @param  string   $output_file  filename to output to
      * @param  boolean  $free Free the ressources
      *                  after transformation
      *
@@ -243,15 +240,15 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * @return mixed return
      * @see backend
      */
-    function ResultDumpFile($output_file='', $free=true)
+    function ResultDumpFile($output_file = '', $free = true)
     {
         $return = false;
         if (!$this->error_code && $this->_initXSL_Done && $this->_initXML_Done) {
-            if ( $output_file=='') {
+            if ( $output_file == '') {
                 $output_file = $this->outputFile;
             }
             if (!$this->error_code) {
-                if ($this->result->dump_file($output_file,false)) {
+                if ($this->result->dump_file($output_file, false)) {
                     $result = true;
                 }
             }
@@ -269,15 +266,10 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
      * @return mixed return
      * @
      */
-    function batchXML($options=null)
+    function batchXML($options = null)
     {
         if (is_null($options)) {
-            $this->error = PEAR::raiseError(null,
-                                XML_XSLT_ERROR_NOOPTIONS,
-                                null, null,
-                                ' missing XML data',
-                                $this->error_class, true
-                            );
+            $this->error = $this->raiseError(XML_XSLT_ERROR_NOOPTIONS);
             return false;
         }
         if (isset($options['outputfolder'])) {
@@ -304,12 +296,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
             }
             $this->_initXML();
         } else {
-            $this->error = PEAR::raiseError(null,
-                                XML_XSLT_ERROR_XML_EMPTY,
-                                null, null,
-                                ' missing XML data',
-                                $this->error_class, true
-                            );
+            $this->error = $this->raiseError(XML_XSLT_ERROR_XML_EMPTY);
         }
         if (isset($options['xslt_files']) && is_array($options['xslt_files'])) {
             $xsl_files = $options['xslt_files'];
