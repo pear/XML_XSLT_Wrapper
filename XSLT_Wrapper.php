@@ -49,14 +49,10 @@ define('XML_XSLT_MSXSL_COM','MSXSL_com');
 /**
  * Output modes constants
  */
-
-/**
- * Standard output
- * @const XSLT_OUTPUT_STDOUT
- */
-define('XML_XSLT_OUTPUT_STDOUT',1);
-define('XML_XSLT_OUTPUT_FILE',  2);
-define('XML_XSLT_OUTPUT_MEM',   4);
+define('XML_XSLT_OUTPUT_STDOUT',   1);
+define('XML_XSLT_OUTPUT_FILE',     2);
+define('XML_XSLT_OUTPUT_MEM',      4);
+define('XML_XSLT_OUTPUT_CALLBACK', 5);
 
 /**
  * Errors constants
@@ -103,16 +99,16 @@ class XML_XSLT_Wrapper
      * @return mixed a newly created XSLT object, or a XSLT error code on
      * @see backend
      */
-    function &factory( $backend )
+    function &factory($backend)
     {
-        include_once "XML/XSLT/Wrapper/Backend/$backend.php";
+        @include_once "XML/XSLT/Wrapper/Backend/$backend.php";
         $classname = 'XML_XSLT_Backend_' . $backend;
         if (!class_exists($classname)) {
             include_once 'PEAR.php';
-            return PEAR::raiseError(null, XML_XSLT_ERROR_BACKEND_NOTFOUND,
-                                    null, null, null, 'XML_XSLT_Error', false);
+            return $this->raiseError(XML_XSLT_ERROR_BACKEND_NOTFOUND,
+                                    null, null, 'XML_XSLT_Error');
         }
-        $obj =& new $classname;
+        @$obj =& new $classname;
         return $obj;
     }
 
@@ -122,23 +118,23 @@ class XML_XSLT_Wrapper
     /**
      * Init
      *
-     * @param  string  $backend name of the backend
+     * @param  array    $options  options
      * @access public
      * @return mixed return
      * @see backend
      */
-    function Init( $options)
+    function Init($options)
     {
         return $obj;
     }
 
     // }}}
-    // {{{ Init
+    // {{{ errorMessage
 
     /**
      * errorMessage
      *
-     * @param  string  $backend name of the backend
+     * @param  int  $value  error code
      * @access private
      * @return mixed return
      * @see backend
@@ -199,10 +195,11 @@ class XML_XSLT_Wrapper
  * @package XML_XSLT_Wrapper
  * @author Pierre-Alain Joye  <pajoye@pearfr.org>
  */
-class XML_XSLT_Common
+class XML_XSLT_Common extends PEAR
 {
     /**
      * Defines if the backend works in a shell
+     * 
      * @var boolean  $_console_mode
      * @access private
      */
@@ -210,13 +207,15 @@ class XML_XSLT_Common
 
     /**
      * Key/Value parameters passed to the XSLT sheet
+     * 
      * @var array $params
      * @access private
      */
-    var $error_class    = 'XML_XSLT_Error';
+    var $error_class = 'XML_XSLT_Error';
 
     /**
      * Key/Value parameters passed to the XSLT sheet
+     * 
      * @var array $params
      * @access private
      */
@@ -225,6 +224,7 @@ class XML_XSLT_Common
     /**
      * Key/Value options passed to the XSLT command
      * Currenlty not used
+     * 
      * @var array  $options
      * @access private
      */
@@ -232,63 +232,69 @@ class XML_XSLT_Common
 
     /**
      * string or file path
+     * 
      * @var string  $xml
      * @access private
      */
-    var $xml            = '';
+    var $xml = '';
 
     /**
      * XSLT sheet
      *
-     * @var string  $xml            string or file path
+     * @var string  $xml    string or file path
      * @access private
      */
-    var $xslt           = '';
+    var $xslt = '';
 
     /**
      * XSL_Mode
      * @var integer $XSL_Mode       Mode to use for XSL
      * @access private
      */
-    var $XSL_Mode       = XML_XSLT_MODE_FILE;
+    var $XSL_Mode = XML_XSLT_MODE_FILE;
 
     /**
      * XML_Mode
      * @var integer $XML_Mode       Mode to use for XML
      * @access private
      */
-    var $XML_Mode       = XML_XSLT_MODE_STRING;
+    var $XML_Mode = XML_XSLT_MODE_STRING;
 
     /**
      * _initXSL_Done
+     * 
      * @var integer $XML_Mode       Defines if the XSL init
      *                              has been done.
      * @access private
      */
-    var $_initXSL_Done  = false;
+    var $_initXSL_Done = false;
 
     /**
      * _initXML_Done
+     * 
      * @var integer $XML_Mode       Defines if the XML init
      *                              has been done.
      * @access private
      */
-    var $_initXML_Done  = false;
+    var $_initXML_Done = false;
 
     /**
      * string or file path
+     *
      * @var string  $result
      */
-    var $result         = '';
+    var $result = '';
 
     /**
      * Output encode format
+     * 
      * @var string $outputEncoding
      */
-    var $outputEncoding ='';
+    var $outputEncoding = '';
 
     /**
      * Output filepath
+     * 
      * @var string  $outputFile
      */
     var $outputFile     = '';
@@ -296,29 +302,106 @@ class XML_XSLT_Common
 
     /**
      * Native Backend Error code
+     * 
      * @var string $native_error_code
      */
-    var $native_error_code=0;
+    var $native_error_code = 0;
 
     /**
      * Native Backend Error message
+     * 
      * @var string $native_error_message
      */
-    var $native_error_message='';
+    var $native_error_message = '';
 
     /**
      * Error code
+     * 
      * @var integer $error_code
      */
-    var $error_code=0;
+    var $error_code = 0;
 
+    // {{{ constructor
 
+    /**
+     * Class constructor
+     */
+    function XML_XSLT_Common()
+    {
+    	$this->PEAR($this->error_class);
+        $this->setErrorHandling(PEAR_ERROR_RETURN);
+    } // end func XML_XSLT_Common
+
+    /**
+     * Destructor
+     */
+    function _XML_XSLT_Common()
+    {
+    	$this->_PEAR();
+    } // end func _XML_XSLT_Common
+
+    // }}}
+
+    // {{{ raiseError()
+
+    /**
+     * This method is used to communicate an error and invoke error
+     * callbacks etc.  Basically a wrapper for PEAR::raiseError
+     * without the message string.
+     *
+     * @param mixed    integer error code, or a PEAR error object (all
+     *                 other parameters are ignored if this parameter is
+     *                 an object
+     *
+     * @param int      error mode, see PEAR_Error docs
+     *
+     * @param mixed    If error mode is PEAR_ERROR_TRIGGER, this is the
+     *                 error level (E_USER_NOTICE etc).  If error mode is
+     *                 PEAR_ERROR_CALLBACK, this is the callback function,
+     *                 either as a function name, or as an array of an
+     *                 object and method name.  For other error modes this
+     *                 parameter is ignored.
+     *
+     * @param string   Extra debug information.  Defaults to the last
+     *                 query and native error code.
+     *
+     * @param mixed    Native error code, integer or string depending the
+     *                 backend.
+     *
+     * @return object  a PEAR error object
+     *
+     * @access public
+     * @see PEAR_Error
+     */
+    function &raiseError($code = XML_XSLT_ERROR, $mode = null, $options = null,
+                         $userinfo = null, $nativecode = null)
+    {
+        // The error is yet a DB error object
+        if (is_object($code)) {
+            // because we the static PEAR::raiseError, our global
+            // handler should be used if it is set
+            if ($mode === null && !empty($this->_default_error_mode)) {
+                $mode    = $this->_default_error_mode;
+                $options = $this->_default_error_options;
+            }
+            return PEAR::raiseError($code, null, $mode, $options, null, null, true);
+        }
+
+        return PEAR::raiseError(null, $code, $mode, $options, $userinfo,
+                                  'XML_XSLT_Error', true);
+    }
+
+    // }}}
     // {{{ setParams
 
     /**
      * Set the XML data to transform
      *
-     * @param  string  $backend name of the backend
+     * @param  string  $data     source origin (file path, URI)
+     *                           or XSLT definitions within
+     *                           inside a string variable.
+     * @param  string  $mode     the conversion mode, see constants
+     * @param  string  $options  options
      * @access public
      * @return mixed return
      * @see backend
@@ -356,9 +439,8 @@ class XML_XSLT_Common
                     $error_user = 'Missed XML data ';
         }
         if ($error){
-            $this->error = PEAR::raiseError(null, $error_code, null, null,
-                    $error_user,
-                    $this->error_class, true);
+            $this->error = 
+                $this->raiseError($error_code, null, null, $error_user);
             return false;
         }
         return true;
@@ -376,7 +458,7 @@ class XML_XSLT_Common
      * @access public
      * @return mixed return
      */
-    function setXSL($data="", $mode=XML_XSLT_MODE_FILE,$options=null)
+    function setXSL($data = '', $mode = XML_XSLT_MODE_FILE, $options = null)
     {
         $error  = false;
         if($data!=""){
@@ -392,7 +474,7 @@ class XML_XSLT_Common
                         } else {
                             $error      = true;
                             $error_code = XML_XSLT_ERROR_XSLFILE_NOTFOUND;
-                            $error_user = 'Failed to load `' . $data.'`';
+                            $error_user = 'Failed to load `' . $data . '`';
                         }
                     break;
                 case XML_XSLT_MODE_URI:
@@ -401,7 +483,7 @@ class XML_XSLT_Common
                 default:
                     $error      = true;
                     $error_code = XML_XSLT_ERROR_UNKNOWN_MODE;
-                    $error_user = 'Unknown input mode `' . $mode.'`';
+                    $error_user = 'Unknown input mode `' . $mode . '`';
             }
         } else {
             $error      = true;
@@ -424,7 +506,7 @@ class XML_XSLT_Common
     /**
      * Set a group of parameters for XSLT
      *
-     * @param  string  $backend name of the backend
+     * @param  array  $params parameters which will be used by the backend
      * @access public
      * @return mixed return
      * @see backend
@@ -531,7 +613,7 @@ class XML_XSLT_Common
         } else {
             $this->error = PEAR::raiseError(null, XML_XSLT_ERROR_FILE_FAILED,
                                 null, null,
-                                'Cannot open file `' . $path.'`',
+                                'Cannot open file `' . $path . '`',
                                 $this->error_class, true
                             );
             return '';
@@ -565,16 +647,16 @@ class XML_XSLT_Common
      * @access private
      * @return mixed return
      */
-    function _saveResult($filepath='')
+    function _saveResult($filepath = '')
     {
-        if($fd = @fopen ($filepath, "wb+")){
+        if($fd = @fopen($filepath, 'wb+')){
             fputs($fd, $this->result);
             fclose ($fd);
             return true;
         }
         $this->error = PEAR::raiseError(null, XML_XSLT_ERROR_FILE_FAILED,
                             null, null,
-                            'Cannot write file `' . $data.'`',
+                            'Cannot write file `' . $data . '`',
                             $this->error_class, true
                         );
         return false;
@@ -593,9 +675,9 @@ class XML_XSLT_Common
     function _saveTempData($data)
     {
         include_once 'System.php';
-        $tempfile = System::mktemp("pxslt_");
+        $tempfile = System::mktemp('pxslt_');
         if(!PEAR::isError( $tempfile )){
-            if($fd = @fopen ($tempfile, "wb+")){
+            if($fd = @fopen ($tempfile, 'wb+')){
                 fputs($fd, $data);
                 fclose ($fd);
                 return $tempfile;
@@ -636,15 +718,15 @@ class XML_XSLT_Common
      * @return boolean
      * @see backend
      */
-    function setOuputMode( $mode=XSLT_OUTPUT_MEM, $arg='' )
+    function setOuputMode($mode = XSLT_OUTPUT_MEM, $arg = '')
     {
-        if( $mode=XSLT_OUTPUT_FILE ){
+        if ($mode = XML_XSLT_OUTPUT_FILE) {
             $this->outputFile = $arg;
         }
-        if( $mode=XSLT_OUTPUT_CALLBACK ){
+        if ($mode = XML_XSLT_OUTPUT_CALLBACK) {
             $this->callback = $arg;
         }
-        if( $mode=XSLT_OUTPUT_CALLBACK ){
+        if ($mode = XML_XSLT_OUTPUT_CALLBACK) {
             $this->callback = $arg;
         }
         $this->OutputMode = $mode;
@@ -708,7 +790,7 @@ class XML_XSLT_Common
      * @return mixed return
      * @see backend
      */
-    function batchXML( $options )
+    function batchXML($options)
     {
         return false;
     }
