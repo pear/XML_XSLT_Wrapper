@@ -10,7 +10,7 @@ It provides :
   - XSLT php extension
   - XSLT command line tool (xsltproc)
   - MSXML using COM php extension
-  - XT command line (http://www.blnz.com/xt/xt-20020426a-src/index.html)
+  - XT command line (http://www.blnz.com/xt/xt-20020426a-src/butorindex.html)
   - Sablotron command line (http://www.gingerall.com/charlie/ga/act/gadoc.act?pg=sablot#i__1940)
   Planned interface :
   - XT java interface
@@ -27,6 +27,12 @@ See http://www.pearfr.org/xslt_wrapper/ for samples and documentation</descripti
       <name>Pierre-Alain Joye</name>
       <email>pajoye@pearfr.org</email>
       <role>lead</role>
+    </maintainer>
+    <maintainer>
+      <user>arnaud</user>
+      <name>Arnaud Limbourg</name>
+      <email>arnaud.limbourg@club-internet.fr</email>
+      <role>contributor</role>
     </maintainer>
   </maintainers>
   <release>
