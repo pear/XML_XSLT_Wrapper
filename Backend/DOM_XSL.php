@@ -1,24 +1,36 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Pierre-Alain Joye <pajoye@pearfr.org>                       |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
+/**
+ * XML_XSLT_Wrapper
+ *
+ * PHP Version 4
+ *
+ * Copyright (c) 1997-2003 The PHP Group
+ *
+ * This source file is subject to version 2.0 of the PHP license,
+ * that is bundled with this package in the file LICENSE, and is
+ * available at through the world-wide-web at
+ * http://www.php.net/license/2_02.txt.
+ * If you did not receive a copy of the PHP license and are unable to
+ * obtain it through the world-wide-web, please send a note to
+ * license@php.net so we can mail you a copy immediately.
+ *
+ * @category XML
+ * @package  XML_XSLT_Wrapper
+ * @author   Pierre-Alain Joye <pajoye@pearfr.org>
+ * @license  PHP 2.02 http://www.php.net/license/2_02.txt
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/packages/XML_XSLT_Wrapper
+ */
 
+/**
+ * XML_XSLT_Backend_DOM_XSL
+ *
+ * @category XML
+ * @package  XML_XSLT_Wrapper
+ * @author   Pierre-Alain Joye <pajoye@pearfr.org>
+ * @license  PHP 2.02 http://www.php.net/license/2_02.txt
+ * @link     http://pear.php.net/packages/XML_XSLT_Wrapper
+ */
 class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
 {
     /**
@@ -42,7 +54,6 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * Set the parameters for the active XSL sheet
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      */
@@ -85,16 +96,17 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     function _initXSL()
     {
         switch($this->XSL_Mode) {
-            case XML_XSLT_MODE_STRING:
-                    $this->_oXSL = @domxml_xslt_stylesheet($this->xslt);
-                break;
-            case XML_XSLT_MODE_FILE:
-                    $this->_oXSL = @domxml_xslt_stylesheet_file($this->xslt);
-                break;
-            case XML_XSLT_MODE_URI:
-                    $xslt = $this->getURIContent($this->xslt);
-                    $this->_oXSL = @domxml_xslt_stylesheet($this->xslt);
-                break;
+        case XML_XSLT_MODE_STRING:
+            $this->_oXSL = @domxml_xslt_stylesheet($this->xslt);
+            break;
+        case XML_XSLT_MODE_FILE:
+            $this->_oXSL = @domxml_xslt_stylesheet_file($this->xslt);
+            break;
+        case XML_XSLT_MODE_URI:
+            $xslt = $this->getURIContent($this->xslt);
+
+            $this->_oXSL = @domxml_xslt_stylesheet($this->xslt);
+            break;
         }
         if (! $this->_oXSL) {
             return $this->raiseError(XML_XSLT_ERROR_LOADXSL_FAILED);
@@ -117,16 +129,17 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     function _initXML()
     {
         switch($this->XML_Mode) {
-            case XML_XSLT_MODE_STRING:
-                    $this->_oXML = @domxml_open_mem($this->xml);
-                break;
-            case XML_XSLT_MODE_FILE:
-                    $this->_oXML = @domxml_open_file($this->xml);
-                break;
-            case XML_XSLT_MODE_URI:
-                    $xml = $this->getURIContent($this->xml);
-                    $this->_oXML = @domxml_open_mem($xml);
-                break;
+        case XML_XSLT_MODE_STRING:
+            $this->_oXML = @domxml_open_mem($this->xml);
+            break;
+        case XML_XSLT_MODE_FILE:
+            $this->_oXML = @domxml_open_file($this->xml);
+            break;
+        case XML_XSLT_MODE_URI:
+            $xml = $this->getURIContent($this->xml);
+
+            $this->_oXML = @domxml_open_mem($xml);
+            break;
         }
         if (!$this->_oXML) {
             return $this->raiseError(XML_XSLT_ERROR_XMLPARSER_ERROR);
@@ -160,7 +173,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
                 }
             }
             if (is_array($this->params)) {
-                $this->result = $this->_oXSL->process( $this->_oXML,
+                $this->result = $this->_oXSL->process($this->_oXML,
                                                         $this->params);
             } else {
                 $this->result = $this->_oXSL->process($this->_oXML);
@@ -180,7 +193,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * Dump the result to standard output.
      *
-     * @param  boolean  $free Free the ressources
+     * @param boolean $free Free the ressources
      *                  after transformation
      *
      * @access public
@@ -190,7 +203,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     function ResultDumpOut($free = true)
     {
         if (!$this->error_code && $this->_initXSL_Done && $this->_initXML_Done) {
-            if ($this->outputEncoding != ''){
+            if ($this->outputEncoding != '') {
                 echo $this->result->dump_mem(true, $this->outputEncoding);
             } else {
                 echo $this->result->dump_mem(true);
@@ -206,7 +219,7 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * Dumps the result to memory
      *
-     * @param  boolean  $free Free the ressources
+     * @param boolean $free Free the ressources
      *                  after transformation
      *
      * @access public
@@ -216,8 +229,8 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     function ResultDumpMem($free = true)
     {
         if (!$this->error_code && $this->_initXSL_Done && $this->_initXML_Done) {
-            if ($this->outputEncoding!=''){
-                return $this->result->dump_mem(true,$this->outputEncoding);
+            if ($this->outputEncoding!='') {
+                return $this->result->dump_mem(true, $this->outputEncoding);
             } else {
                 return $this->result->dump_mem(true);
             }
@@ -232,9 +245,9 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * Dumps the result to a file
      *
-     * @param  string   $output_file  filename to output to
-     * @param  boolean  $free Free the ressources
-     *                  after transformation
+     * @param string  $output_file filename to output to
+     * @param boolean $free        Free the ressources
+     *                             after transformation
      *
      * @access public
      * @return mixed return
@@ -262,6 +275,8 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * Transform single XML data with multiple XSL files
      *
+     * @param array $options Options
+     *
      * @access public
      * @return mixed return
      * @
@@ -284,11 +299,11 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
                             E_USER_ERROR);
             return false;
         }
-        $dest_dir   = $options['outputfolder'];
+        $dest_dir = $options['outputfolder'];
         if (isset($options['xml'])) {
-            $mode       = $options['xml'][0]=='<'?
+            $mode = $options['xml'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
-            if (!$this->setXML($options['xml'],$mode)){
+            if (!$this->setXML($options['xml'], $mode)) {
                 $this->error = new XML_XSLT_Error (null,
                                 XML_XSLT_ERROR_XML_EMPTY,
                                 E_USER_ERROR);
@@ -302,10 +317,10 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
             $xsl_files = $options['xslt_files'];
             $xslt_args = '';
             foreach ($xsl_files as $xslt_file => $xslt) {
-                if ($this->setXSL($xslt['filepath'],XML_XSLT_MODE_FILE)) {
+                if ($this->setXSL($xslt['filepath'], XML_XSLT_MODE_FILE)) {
                     $this->_initXSL();
                     $this->process();
-                    $this->ResultDumpFile($dest_dir.'/' . $xslt['outputfile'],false);
+                    $this->ResultDumpFile($dest_dir.'/' . $xslt['outputfile'], false);
                 } else {
                     return false;
                 }
@@ -320,6 +335,8 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
 
     /**
      * Transform multiple XML data with a single XSL files
+     *
+     * @param array $options Options
      *
      * @access public
      * @return mixed return
@@ -342,24 +359,24 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
                             E_USER_ERROR);
             return false;
         }
-        $dest_dir   = $options['outputfolder'];
+        $dest_dir = $options['outputfolder'];
 
         if (isset($options['xslt'])) {
-            if (!$this->setXSL($options['xslt'],XML_XSLT_MODE_FILE)){
+            if (!$this->setXSL($options['xslt'], XML_XSLT_MODE_FILE)) {
                 return false;
             }
             $this->_initXSL();
         }
         if (isset($options['xml_datas']) && is_array($options['xml_datas'])) {
             $xml_files = $options['xml_datas'];
-            $xml_args = '';
+            $xml_args  = '';
             foreach ($xml_files as $xml_file => $xml) {
-                $mode       = $xml['data'][0]=='<'?
+                $mode = $xml['data'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
-                $this->setXML($xml['data'],$mode);
+                $this->setXML($xml['data'], $mode);
                 $this->_initXML();
                 $this->process();
-                $this->ResultDumpFile($dest_dir.'/' . $xml['outputfile'],false);
+                $this->ResultDumpFile($dest_dir.'/' . $xml['outputfile'], false);
             }
         }
         $this->free();
@@ -372,7 +389,6 @@ class XML_XSLT_Backend_DOM_XSL extends XML_XSLT_Common
     /**
      * Set the parameters for the active XSL sheet
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      * @

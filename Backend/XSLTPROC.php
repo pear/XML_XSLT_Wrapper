@@ -1,24 +1,26 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Pierre-Alain Joye <pajoye@pearfr.org>                       |
-// |          Arnaud Limbourg   <arnaud@limbourg.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
+/**
+ * XML_XSLT_Wrapper
+ *
+ * PHP Version 4
+ *
+ * Copyright (c) 1997-2003 The PHP Group
+ *
+ * This source file is subject to version 2.0 of the PHP license,
+ * that is bundled with this package in the file LICENSE, and is
+ * available at through the world-wide-web at
+ * http://www.php.net/license/2_02.txt.
+ * If you did not receive a copy of the PHP license and are unable to
+ * obtain it through the world-wide-web, please send a note to
+ * license@php.net so we can mail you a copy immediately.
+ *
+ * @category XML
+ * @package  XML_XSLT_Wrapper
+ * @author   Pierre-Alain Joye <pajoye@pearfr.org>
+ * @license  PHP 2.02 http://www.php.net/license/2_02.txt
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/packages/XML_XSLT_Wrapper
+ */
 
 /**
  * Backend which manages
@@ -26,7 +28,12 @@
  * 
  * This command is part of the libxslt library.
  *
- * @see http://xmlsoft.org/XSLT/
+ * @category XML
+ * @package  XML_XSLT_Wrapper
+ * @author   Pierre-Alain Joye <pajoye@pearfr.org>
+ * @license  PHP 2.02 http://www.php.net/license/2_02.txt
+ * @link     http://pear.php.net/packages/XML_XSLT_Wrapper
+ * @see      http://xmlsoft.org/XSLT/
  */
 class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
 {
@@ -97,13 +104,15 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
      * @return string   string containing the parameters 
      *                  to pass to the command
      */
-    function _buildParams(){
+    function _buildParams()
+    {
         $arg_params = '';
+
         if (!is_null($this->params)) {
             $parms = $this->params;
             foreach ($parms as $name => $value) {
                 if (is_string($value)) {
-                	$arg_params .= ' ' . $name . " '" . escapeshellcmd($value) . "' ";
+                    $arg_params .= ' ' . $name . " '" . escapeshellcmd($value) . "' ";
                 } else {
                     if (is_numeric($value)) {
                         $arg_params .= ' ' . $name . '=' . $value;
@@ -127,23 +136,22 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function initXSL()
     {
         switch ($this->XSL_Mode) {
-            case XML_XSLT_MODE_STRING:
-                    $this->_arg_xsl = $this->_saveTempData($this->xsl);
-                break;
-            case XML_XSLT_MODE_FILE:
-                    $this->_arg_xsl = $this->xslt;
-                break;
-            case XML_XSLT_MODE_URI:
-                    $this->_arg_xsl = $this->xslt;
-                break;
-            default:
-                $this->error = PEAR::raiseError(null,
-                                    XML_XSLT_ERROR_UNKNOWN_MODE,
-                                    null, null,
-                                    'Unknown XSL mode',
-                                    $this->error_class, true
-                                );
-                return false;
+        case XML_XSLT_MODE_STRING:
+            $this->_arg_xsl = $this->_saveTempData($this->xsl);
+            break;
+        case XML_XSLT_MODE_FILE:
+            $this->_arg_xsl = $this->xslt;
+            break;
+        case XML_XSLT_MODE_URI:
+            $this->_arg_xsl = $this->xslt;
+            break;
+        default:
+            $this->error = PEAR::raiseError(null,
+                                XML_XSLT_ERROR_UNKNOWN_MODE,
+                                null, null,
+                                'Unknown XSL mode',
+                                $this->error_class, true);
+            return false;
         }
         $this->_initXSL_Done = true;
         return true;
@@ -162,22 +170,20 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function initXML()
     {
         switch ($this->XML_Mode) {
-            case XML_XSLT_MODE_STRING:
-                    $this->_arg_xml = $this->_saveTempData($this->xml);
-                break;
-            case XML_XSLT_MODE_FILE:
-                    $this->_arg_xml = $this->xml;
-                break;
-            case XML_XSLT_MODE_URI:
-                    $$this->_arg_xml = $this->xml;
-                break;
-            default:
-                $this->error = $this->raiseError(
-                                    XML_XSLT_ERROR_UNKNOWN_MODE,
-                                    null, null,
-                                    'Unknown XML mode'
-                                );
-                return false;
+        case XML_XSLT_MODE_STRING:
+            $this->_arg_xml = $this->_saveTempData($this->xml);
+            break;
+        case XML_XSLT_MODE_FILE:
+            $this->_arg_xml = $this->xml;
+            break;
+        case XML_XSLT_MODE_URI:
+            $this->_arg_xml = $this->xml;
+            break;
+        default:
+            $this->error = $this->raiseError(XML_XSLT_ERROR_UNKNOWN_MODE,
+                                            null, null,
+                                            'Unknown XML mode');
+            return false;
         }
         $this->_initXML_Done = true;
         return true;
@@ -190,12 +196,12 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
      * Do nothing with this backend, all process
      * and ouputs are done in ResultDumpXXXX methods
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      * @see backend
      */
-    function process(){
+    function process()
+    {
         if (!$this->_initXML_Done) {
             if (!$this->initXML()) {
                 return false;
@@ -215,7 +221,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     /**
      * Return the result of the transformation
      *
-     * @param  boolean  $free   Free the ressources
+     * @param boolean $free Free the ressources
      *                          after the transformation
      *
      * @access public
@@ -224,7 +230,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function ResultDumpMem($free = true)
     {
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
-            exec(   XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+            exec(XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                     $this->_arg_xsl . ' ' . $this->_arg_xml,
                     $result, $return_code);
 
@@ -238,7 +244,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                 $string_result = $result;
             }
 
-            if ($return_code == 0 && is_string($string_result) && strlen($string_result) > 0){
+            if ($return_code == 0 && is_string($string_result) && strlen($string_result) > 0) {
                 return $string_result;
             } else {
                 $this->error = PEAR::raiseError(null,
@@ -246,13 +252,12 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                     null, null,
                                     'Command returned: ' . $return_code.
                                     ' ' . $string_result,
-                                    $this->error_class, true
-                                );
+                                    $this->error_class, true);
                 return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     // }}}
@@ -261,8 +266,9 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     /**
      * Dump the result of the transformation to a file
      *
-     * @param  boolean  $free   Free the ressources
+     * @param boolean $free Free the ressources
      *                          after the transformation
+     *
      * @access public
      * @return mixed return
      */
@@ -284,7 +290,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                 $string_result = $result;
             }
 
-            if ($return_code == 0){
+            if ($return_code == 0) {
                 return true;
             } else {
                 $this->error = PEAR::raiseError(null,
@@ -292,8 +298,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                     null, null,
                                     'Command returned: ' . $return_code.
                                     ' ' . $string_result,
-                                    $this->error_class, true
-                                );
+                                    $this->error_class, true);
                 return false;
             }
         } else {
@@ -307,7 +312,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     /**
      * Dumps the result of the transformation to stdout
      *
-     * @param  boolean  $free   Free the ressources or not
+     * @param boolean $free Free the ressources
      *                          after the transformation
      *
      * @access public
@@ -316,7 +321,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     function ResultDumpOut($free = true)
     {
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
-            passthru( XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+            passthru(XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                       $this->_arg_xsl . ' ' . $this->_arg_xml);
 
             if ($free) {
@@ -333,9 +338,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     /**
      * Transform one single XML data with multiple XSL files
      *
-     * @access public
-     * @param  array   $options  array as follows
-     *
+     * @param array $options array as follows
      *                 $options['outputfolder'] = './outputbatch2/';
      *                 $options['xml'] = $xml_file_here;
      *                 $options['xslt_files'] = array(
@@ -348,6 +351,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
      *                                                     'outputfile' => 't2'
      *                                                 )
      *                                             );
+     *
      * @return mixed return
      */
     function batchXML($options = null)
@@ -357,8 +361,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
                                 ' missing XML data',
-                                $this->error_class, true
-                            );
+                                $this->error_class, true);
             return false;
         }
         if (isset($options['outputfolder'])) {
@@ -372,18 +375,17 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                             XML_XSLT_ERROR_MISSEDDIR_FAILED,
                             null, null,
                            'Output folder missing',
-                            $this->error_class, true
-                        );
+                            $this->error_class, true);
             return false;
         }
 
-        $dest_dir   = $options['outputfolder'];
+        $dest_dir = $options['outputfolder'];
 
         if (isset($options['xml'])) {
-            $mode       = $options['xml'][0] == '<' ?
+            $mode = $options['xml'][0] == '<' ?
                             XML_XSLT_MODE_STRING : XML_XSLT_MODE_FILE;
 
-            if (!$this->setXML($options['xml'], $mode)){
+            if (!$this->setXML($options['xml'], $mode)) {
                 $this->error = PEAR::raiseError(1002);
                 return false;
             }
@@ -393,22 +395,20 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                 XML_XSLT_ERROR_XML_EMPTY,
                                 null, null,
                                 ' missing XML data',
-                                $this->error_class, true
-                            );
+                                $this->error_class, true);
             return false;
         }
 
-        if(isset($options['xslt_files']) && is_array($options['xslt_files'])) {
+        if (isset($options['xslt_files']) && is_array($options['xslt_files'])) {
             $xsl_files = $options['xslt_files'];
             $xslt_args = '';
 
             foreach ($xsl_files as $xslt_file => $xslt) {
-                exec(   XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+                exec(XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                         ' -o ' . $dest_dir . $xslt['outputfile'] .
                         escapeshellarg($xslt['filepath']) . ' ' .
                         $this->_arg_xml,
-                        $messages, $return_code
-                    );
+                        $messages, $return_code);
 
                 if ($return_code==0) {
                     $error = false;
@@ -418,8 +418,8 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                         null, null,
                                         'Command returned: ' . $return_code.
                                         ' ' . $messages,
-                                        $this->error_class, true
-                                    );
+                                        $this->error_class, true);
+
                     $error = true;
                     break;
                 }
@@ -435,9 +435,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
     /**
      * Transform multiple XML data with a single XSL files
      *
-     * @access public
-     * @param  array   associative array of the following form
-     **
+     * @param array $options associative array of the following form
      *     $options['xslt']         = './examples/table.xsl';
      *     $options['xml_datas']   = array(
      *                                     array(
@@ -451,6 +449,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
      *                                 );
      *     $options['outputfolder'] = './outputbatch4312/';
      *
+     * @access public
      * @return mixed return
      */
     function batchXSL($options = null)
@@ -460,8 +459,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
                                 ' missing XML data',
-                                $this->error_class, true
-                            );
+                                $this->error_class, true);
             return false;
         }
 
@@ -476,8 +474,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                             XML_XSLT_ERROR_MISSEDDIR_FAILED,
                             null, null,
                            'Output folder missing',
-                            $this->error_class, true
-                        );
+                            $this->error_class, true);
             return false;
         }
 
@@ -485,7 +482,7 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
 
         if (isset($options['xslt'])) {
 
-            if (!$this->setXSL($options['xslt'], XML_XSLT_MODE_FILE)){
+            if (!$this->setXSL($options['xslt'], XML_XSLT_MODE_FILE)) {
                 $this->error = PEAR::raiseError(1002);
                 return false;
             }
@@ -495,31 +492,29 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                 XML_XSLT_ERROR_XSL_EMPTY,
                                 null, null,
                                 'missing XSL data in batchXSL',
-                                $this->error_class, true
-                            );
+                                $this->error_class, true);
             return false;
         }
 
         if (isset($options['xml_datas']) && is_array($options['xml_datas'])) {
             $xml_files = $options['xml_datas'];
-            $xml_args = '';
+            $xml_args  = '';
 
             foreach ($xml_files as $xml_file => $xml) {
-                $mode       = $xml['data'][0] == '<'?
+                $mode = $xml['data'][0] == '<'?
                             XML_XSLT_MODE_STRING : XML_XSLT_MODE_FILE;
 
                 if ($xml['data'][0] == '<') {
-                    $xmlfile    = $this->_saveTempData($xml['data']);
+                    $xmlfile = $this->_saveTempData($xml['data']);
                 } else {
-                    $xmlfile    = $xml['data'];
+                    $xmlfile = $xml['data'];
                 }
 
-                exec(   XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
+                exec(XML_XSLT_XSLTPROC_CMD . ' ' . $this->_buildParams() . ' ' .
                         ' -o ' . $dest_dir . $xml['outputfile'] .
                         $this->_arg_xsl . ' ' . $this->_arg_xml,
                         $messages,
-                        $return_code
-                    );
+                        $return_code);
 
                 if ($return_code == 0) {
                     $error = false;
@@ -529,8 +524,8 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
                                         null, null,
                                         'Command returned: ' . $return_code.
                                         ' ' . $messages,
-                                        $this->error_class, true
-                                    );
+                                        $this->error_class, true);
+
                     $error = true;
                     break;
                 }
@@ -550,7 +545,8 @@ class XML_XSLT_Backend_XSLTPROC extends XML_XSLT_Common
      * @return mixed return
      * @
      */
-    function free(){
+    function free()
+    {
         $this->_removeTempData();
     }
 

@@ -1,24 +1,36 @@
 <?php
-//
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Pierre-Alain Joye <pajoye@pearfr.org>                       |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
+/**
+ * XML_XSLT_Wrapper
+ *
+ * PHP Version 4
+ *
+ * Copyright (c) 1997-2003 The PHP Group
+ *
+ * This source file is subject to version 2.0 of the PHP license,
+ * that is bundled with this package in the file LICENSE, and is
+ * available at through the world-wide-web at
+ * http://www.php.net/license/2_02.txt.
+ * If you did not receive a copy of the PHP license and are unable to
+ * obtain it through the world-wide-web, please send a note to
+ * license@php.net so we can mail you a copy immediately.
+ *
+ * @category XML
+ * @package  XML_XSLT_Wrapper
+ * @author   Pierre-Alain Joye <pajoye@pearfr.org>
+ * @license  PHP 2.02 http://www.php.net/license/2_02.txt
+ * @version  CVS: $Id$
+ * @link     http://pear.php.net/packages/XML_XSLT_Wrapper
+ */
 
+/**
+ * XML_XSLT_Backend_XSLT_ext
+ *
+ * @category XML
+ * @package  XML_XSLT_Wrapper
+ * @author   Pierre-Alain Joye <pajoye@pearfr.org>
+ * @license  PHP 2.02 http://www.php.net/license/2_02.txt
+ * @link     http://pear.php.net/packages/XML_XSLT_Wrapper
+ */
 class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
 {
     /**
@@ -67,19 +79,16 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Constructor
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      * @see backend
      */
-    function Backend_XSLT_ext ()
+    function Backend_XSLT_ext()
     {
         if (!function_exists('xslt_create')) {
-            include_once('PEAR.php');
+            include_once 'PEAR.php';
             if (!PEAR::loadExtension('xslt')) {
-                return PEAR::raiseError(
-                    'The xslt extension can not be found.', true
-                );
+                return PEAR::raiseError('The xslt extension can not be found.', true);
             }
         }
     }
@@ -90,7 +99,6 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Set the parameters for the active XSL sheet
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      * @see backend
@@ -112,27 +120,32 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      */
     function _initXSL()
     {
-        if ($this->_hXSLT    = xslt_create()) {
-            switch( $this->XSL_Mode ){
-                case XML_XSLT_MODE_STRING:
-                        $this->_arguments['/_xsl'] = &$this->xslt;
-                        $this->arg_xsl  = 'arg:/_xsl';
-                    break;
-                case XML_XSLT_MODE_FILE:
-                        $this->arg_xsl  = $this->xslt;
-                        if (isset($this->_arguments['_xsl'])){
-                            unset($this->_arguments['_xsl']);
-                        }
-                    break;
-                case XML_XSLT_MODE_URI:
-                        $this->arg_xsl  = $this->xslt;
-                        if (isset($this->_arguments['_xsl'])){
-                            unset($this->_arguments['_xsl']);
-                        }
-                    break;
-                default:
-                    return false;
+        if ($this->_hXSLT = xslt_create()) {
+            switch ($this->XSL_Mode) {
+            case XML_XSLT_MODE_STRING:
+                $this->_arguments['/_xsl'] = &$this->xslt;
+
+                $this->arg_xsl = 'arg:/_xsl';
+                break;
+
+            case XML_XSLT_MODE_FILE:
+                $this->arg_xsl = $this->xslt;
+                if (isset($this->_arguments['_xsl'])) {
+                    unset($this->_arguments['_xsl']);
+                }
+                break;
+
+            case XML_XSLT_MODE_URI:
+                $this->arg_xsl = $this->xslt;
+                if (isset($this->_arguments['_xsl'])) {
+                    unset($this->_arguments['_xsl']);
+                }
+                break;
+
+            default:
+                return false;
             }
+
             $this->_initXSL_Done = true;
             return true;
         } else {
@@ -152,38 +165,40 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Set the XML DATA
      *
-     *
      * @access public
      * @return mixed return
      * @see backend
      */
     function _initXML()
     {
-        switch( $this->XML_Mode ){
-            case XML_XSLT_MODE_STRING:
-                    $this->_arguments['/_xml'] = &$this->xml;
-                    $this->arg_xml  = 'arg:/_xml';
-                break;
-            case XML_XSLT_MODE_FILE:
-                    $this->arg_xml  = $this->xml;
-                    if (isset($this->_arguments['_xml'])){
-                        unset($this->_arguments['_xml']);
-                    }
-                break;
-            case XML_XSLT_MODE_URI:
-                    $this->arg_xml  = $this->xml;
-                    if (isset($this->_arguments['_xml'])){
-                        unset($this->_arguments['_xml']);
-                    }
-                break;
-            default:
-                $this->error = PEAR::raiseError(null,
-                                    XML_XSLT_ERROR_UNKNOWN_MODE,
-                                    null, null,
-                                    'Unknown mode',
-                                    $this->error_class, true
-                                );
-                return false;
+        switch ($this->XML_Mode) {
+        case XML_XSLT_MODE_STRING:
+            $this->_arguments['/_xml'] = &$this->xml;
+
+            $this->arg_xml = 'arg:/_xml';
+            break;
+
+        case XML_XSLT_MODE_FILE:
+            $this->arg_xml = $this->xml;
+            if (isset($this->_arguments['_xml'])) {
+                unset($this->_arguments['_xml']);
+            }
+            break;
+
+        case XML_XSLT_MODE_URI:
+            $this->arg_xml = $this->xml;
+            if (isset($this->_arguments['_xml'])) {
+                unset($this->_arguments['_xml']);
+            }
+            break;
+
+        default:
+            $this->error = PEAR::raiseError(null,
+                                XML_XSLT_ERROR_UNKNOWN_MODE,
+                                null, null,
+                                'Unknown mode',
+                                $this->error_class, true);
+            return false;
         }
         $this->_initXML_Done = true;
         return true;
@@ -196,7 +211,6 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * Do nothing with this backend, all process
      * and ouputs are done in ResultDumpXXXX methods
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      * @see backend
@@ -222,7 +236,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Set the parameters for the active XSL sheet
      *
-     * @param  string  $backend name of the backend
+     * @param bool $free free resources
+     *
      * @access public
      * @return mixed return
      * @see backend
@@ -251,8 +266,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                             $error_code,
                             null, null,
                             $error_user,
-                            $this->error_class, true
-                        );
+                            $this->error_class, true);
             return false;
         } else {
             return true;
@@ -265,7 +279,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Set the parameters for the active XSL sheet
      *
-     * @param  string  $backend name of the backend
+     * @param bool $free free resources
+     *
      * @access public
      * @return mixed return
      * @see backend
@@ -277,9 +292,10 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
             if ($this->error_code==0) {
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?
                         $this->_arguments:array();
+
                 $result = @xslt_process($this->_hXSLT, $this->arg_xml,
                             $this->arg_xsl, null, $args, $this->params);
-                if ($result){
+                if ($result) {
                     if ($free) {
                         $this->free();
                     }
@@ -289,8 +305,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                                     null, null,
                                     xslt_errno($this->_hXSLT).
                                     ': '.xslt_error($this->_hXSLT),
-                                    $this->error_class, true
-                                );
+                                    $this->error_class, true);
                 }
             }
         }
@@ -303,12 +318,14 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Set the parameters for the active XSL sheet
      *
-     * @param  string  $backend name of the backend
+     * @param string $output_file Output file
+     * @param bool   $free        free resources
+     *
      * @access public
      * @return mixed return
      * @see backend
      */
-    function ResultDumpFile($output_file='',$free=true)
+    function ResultDumpFile($output_file='', $free=true)
     {
         $error = false;
         if ($this->_initXSL_Done && $this->_initXSL_Done) {
@@ -318,6 +335,7 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                 }
                 $args = isset($this->_arguments)&&sizeof($this->_arguments)?
                         $this->_arguments:array();
+
                 $params = isset($this->params)&&sizeof($this->params)?
                         $this->params:array();
                 $result = xslt_process($this->_hXSLT, $this->arg_xml,
@@ -329,8 +347,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                                     null, null,
                                     xslt_errno($this->_hXSLT).
                                     ': '.xslt_error($this->_hXSLT),
-                                    $this->error_class, true
-                                );
+                                    $this->error_class, true);
+
                     $error = true;
                 }
                 if ($free) {
@@ -349,6 +367,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      *
      * TODO Add errors in the loop process
      *
+     * @param array $options Options
+     *
      * @access public
      * @return mixed return
      * @
@@ -361,10 +381,10 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                                 XML_XSLT_ERROR_NOOPTIONS,
                                 null, null,
                                 ' missing XML data',
-                                $this->error_class, true
-                            );
+                                $this->error_class, true);
             return false;
         }
+
         if (isset($options['outputfolder'])) {
             if (!is_dir($options['outputfolder'])) {
                 if (!$this->_mkdir_p($options['outputfolder'])) {
@@ -376,15 +396,15 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                             XML_XSLT_ERROR_MISSEDDIR_FAILED,
                             null, null,
                            'Output folder missing',
-                            $this->error_class, true
-                        );
+                            $this->error_class, true);
             return false;
         }
-        $dest_dir   = $options['outputfolder'];
+
+        $dest_dir = $options['outputfolder'];
         if (isset($options['xml'])) {
-            $mode       = $options['xml'][0]=='<'?
+            $mode = $options['xml'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
-            if (!$this->setXML($options['xml'],$mode)){
+            if (!$this->setXML($options['xml'], $mode)) {
                 return false;
             }
             $this->_initXML();
@@ -393,26 +413,26 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                                 XML_XSLT_ERROR_XML_EMPTY,
                                 null, null,
                                 ' missing XML data',
-                                $this->error_class, true
-                            );
+                                $this->error_class, true);
         }
         if (isset($options['xslt_files']) && is_array($options['xslt_files'])) {
             $xsl_files = $options['xslt_files'];
             $xslt_args = '';
-            foreach($xsl_files as $xslt_file => $xslt){
-                if (!$this->setXSL($xslt['filepath'],XML_XSLT_MODE_FILE)){
+
+            foreach ($xsl_files as $xslt_file => $xslt) {
+                if (!$this->setXSL($xslt['filepath'], XML_XSLT_MODE_FILE)) {
                     $error = true;
                     break;
                 }
-                if (!$this->_initXSL()){
+                if (!$this->_initXSL()) {
                     $error = true;
                     break;
                 }
-                if (!$this->process()){
+                if (!$this->process()) {
                     $error = true;
                     break;
                 }
-                if (!$this->ResultDumpFile($dest_dir.'' . $xslt['outputfile'],false)){
+                if (!$this->ResultDumpFile($dest_dir.'' . $xslt['outputfile'], false)) {
                     $error = true;
                     break;
                 }
@@ -430,6 +450,8 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
      * Transform multiple XML data with a single XSL files
      *
      * TODO Add errors in the loop process
+     *
+     * @param array $options options
      *
      * @access public
      * @return mixed return
@@ -452,38 +474,37 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
                             XML_XSLT_ERROR_MISSEDDIR_FAILED,
                             null, null,
                            'Output folder missing',
-                            $this->error_class, true
-                        );
+                            $this->error_class, true);
             return false;
         }
-        $dest_dir   = $options['outputfolder'];
+        $dest_dir = $options['outputfolder'];
         if (isset($options['xslt'])) {
-            if (!$this->setXSL($options['xslt'],XML_XSLT_MODE_FILE)){
+            if (!$this->setXSL($options['xslt'], XML_XSLT_MODE_FILE)) {
                     return false;
             }
-            if (!$this->_initXSL()){
+            if (!$this->_initXSL()) {
                 return false;
             }
         }
         if (isset($options['xml_datas']) && is_array($options['xml_datas'])) {
             $xml_files = $options['xml_datas'];
-            $xml_args = '';
-            foreach($xml_files as $xml_file => $xml){
-                $mode       = $xml['data'][0]=='<'?
+            $xml_args  = '';
+            foreach ($xml_files as $xml_file => $xml) {
+                $mode = $xml['data'][0]=='<'?
                             XML_XSLT_MODE_STRING:XML_XSLT_MODE_FILE;
-                if (!$this->setXML($xml['data'],$mode)){
+                if (!$this->setXML($xml['data'], $mode)) {
                     $error = true;
                     break;
                 }
-                if (!$this->_initXML()){
+                if (!$this->_initXML()) {
                     $error = true;
                     break;
                 }
-                if (!$this->process()){
+                if (!$this->process()) {
                     $error = true;
                     break;
                 }
-                if (!$this->ResultDumpFile($dest_dir.'/' . $xml['outputfile'],false)) {
+                if (!$this->ResultDumpFile($dest_dir.'/' . $xml['outputfile'], false)) {
                     $error = true;
                     break;
                 }
@@ -499,7 +520,6 @@ class XML_XSLT_Backend_XSLT_ext extends XML_XSLT_Common
     /**
      * Free all ressources
      *
-     * @param  string  $backend name of the backend
      * @access public
      * @return mixed return
      * @
