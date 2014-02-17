@@ -1,0 +1,28 @@
+{
+    "authors": [
+        {
+            "email": "pajoye@pearfr.org",
+            "name": "Pierre-Alain Joye",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "More info available on: http://pear.php.net/package/XML_XSLT_Wrapper",
+    "license": "PHP License",
+    "name": "pear/xml_xslt_wrapper",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=XML_XSLT_Wrapper",
+        "source": "https://github.com/pear/XML_XSLT_Wrapper"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
